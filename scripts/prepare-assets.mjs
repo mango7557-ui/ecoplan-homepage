@@ -244,25 +244,15 @@ for (const item of placeCards) {
   await buildDesignedPhoto({ ...item, width: 880, height: 580 });
 }
 
-// 6. OG Social Banner
-const og = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#05142b"/>
-      <stop offset="55%" stop-color="#003da5"/>
-      <stop offset="100%" stop-color="#00897b"/>
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <circle cx="1030" cy="180" r="240" fill="none" stroke="#00d4b2" stroke-opacity="0.28" stroke-width="2" stroke-dasharray="10 10"/>
-  <circle cx="1030" cy="180" r="150" fill="none" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
-  <rect x="76" y="78" width="320" height="44" rx="22" fill="#071f42" stroke="#00d4b2" stroke-opacity="0.6"/>
-  <text x="102" y="106" fill="#00d4b2" font-size="18" font-family="Arial, sans-serif" font-weight="700" letter-spacing="2">ECOPLAN SCIENCE CARE</text>
-  <text x="76" y="255" fill="#ffffff" font-size="68" font-family="Malgun Gothic, sans-serif" font-weight="800">보이지 않는 원인까지</text>
-  <text x="76" y="348" fill="#ffffff" font-size="68" font-family="Malgun Gothic, sans-serif" font-weight="800">과학으로 설계하는 방제</text>
-  <text x="76" y="438" fill="#bfe3ff" font-size="28" font-family="Malgun Gothic, sans-serif">3W 원인분석 · IPM 통합방제 · HACCP/GMP 위생솔루션</text>
-  <text x="76" y="545" fill="#00e6c3" font-size="34" font-family="Arial, Malgun Gothic, sans-serif" font-weight="700">주식회사 한국에코플랜 | 상담센터 1688-4587</text>
-</svg>`;
-await sharp(Buffer.from(og)).png().toFile('assets/og.png');
+// 6. KakaoTalk & OpenGraph Social Thumbnail (Using the user-provided EcoPlan image mOGxtRG5.png without cropping)
+await sharp(local + 'mOGxtRG5.png')
+  .resize(1200, 900, { fit: 'inside', withoutEnlargement: true })
+  .jpeg({ quality: 92, mozjpeg: true })
+  .toFile('assets/og-kakao.jpg');
 
-console.log('Photo assets designed and generated: 21 visual assets ready in assets/');
+await sharp(local + 'mOGxtRG5.png')
+  .resize(1200, 900, { fit: 'inside', withoutEnlargement: true })
+  .png({ compressionLevel: 8 })
+  .toFile('assets/og.png');
+
+console.log('Photo assets designed and generated: 22 visual assets ready in assets/');

@@ -46,6 +46,7 @@ const files = [
   'assets/franchise.webp',
   'assets/trap.webp',
   'assets/og.png',
+  'assets/og-kakao.jpg',
   'assets/favicon.svg'
 ];
 
