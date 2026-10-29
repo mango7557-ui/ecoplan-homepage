@@ -23,7 +23,7 @@
 - [관리현황](https://www.ecoplan.co.kr/management.html): 해충 발생 위치, 포획 추이, 시설 개선과 다음 점검 계획까지. 에코플랜의 관리현황 확인 항목과 고객별 관리 기록 문의 방법을 안내합니다.
 - [쇼핑몰](https://www.ecoplan.co.kr/shop.html): 공간에 맞는 포충기 선택과 설치 위치, 유지관리 방법을 상담하세요. SMART CATCH ALPHA 참고 이미지와 구매 전 확인할 항목을 안내합니다.
 - [자주 묻는 질문](https://www.ecoplan.co.kr/faq.html): 방제 비용, 아이·반려동물, 재입실, IPM, HACCP·GMP 시설 관리와 해충별 관리 방법까지. 에코플랜 상담 전 궁금한 질문 22가지를 확인하세요.
-- [해충 자가점검](https://www.ecoplan.co.kr/diagnosis.html): 나방파리·초파리·집파리·집모기·독일바퀴·쥐 발견 흔적과 단계별 서식 수준을 점검하고, 자가처리 방법과 현장 상담 기준을 확인하세요.
+- [해충 자가진단](https://www.ecoplan.co.kr/diagnosis.html): 독일바퀴·쥐·나방파리·초파리·집파리·집모기·개미·먼지다듬이 등 8대 해충별 출현 빈도와 3W 환경 신호를 점검하고 서식 단계와 맞춤 처방을 확인하세요.
 - [상담신청](https://www.ecoplan.co.kr/contact.html): 에코플랜 해충방제·방역소독 상담. 전화 1688-4587, 카카오톡, 이메일 eco@ecoplan.co.kr로 공간 유형과 발생 상황을 알려주세요.
 
 ## 정보 해석
