@@ -99,47 +99,26 @@ async function buildDesignedPhoto({ url, localFile, out, width = 960, height = 6
     .toFile(`assets/${out}`);
 }
 
-// 3. Build Hero Visuals (3 slides inspired by CESCO's science/space/industrial visual storytelling)
-await buildDesignedPhoto({
-  url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85',
-  out: 'hero-space.webp',
-  width: 1440,
-  height: 860,
-  badge: 'ECOPLAN SCIENCE · 3W & IPM',
-  title: '',
-  subtitle: '',
-  accent: '#00d4b2',
-  hudType: 'target'
-});
-await cpToSpaceAlias();
+// 3. Build Crystal-Clear Hero Visuals (No dark tint or overlapping SVG text so the background photo is 100% clear)
+await sharp(local + '47nkn3zF.png')
+  .resize(1440, 860, { fit: 'cover', position: 'centre' })
+  .modulate({ brightness: 1.06, saturation: 1.08 })
+  .webp({ quality: 90 })
+  .toFile('assets/hero-space.webp');
 
-async function cpToSpaceAlias() {
-  await sharp('assets/hero-space.webp').toFile('assets/space.webp');
-}
+await sharp('assets/hero-space.webp').toFile('assets/space.webp');
 
-await buildDesignedPhoto({
-  url: 'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&w=1600&q=85',
-  out: 'hero-lab.webp',
-  width: 1440,
-  height: 860,
-  badge: 'R&D LAB · BIO & ENZYME ANALYSIS',
-  title: '',
-  subtitle: '',
-  accent: '#38bdf8',
-  hudType: 'wave'
-});
+await sharp(local + 'mOGxtRG5.png')
+  .resize(1440, 860, { fit: 'cover', position: 'top' })
+  .modulate({ brightness: 1.04, saturation: 1.05 })
+  .webp({ quality: 90 })
+  .toFile('assets/hero-lab.webp');
 
-await buildDesignedPhoto({
-  localFile: 'nH3FCu8c.png',
-  out: 'hero-industrial.webp',
-  width: 1440,
-  height: 860,
-  badge: 'HACCP · GMP · GSP STANDARD',
-  title: '',
-  subtitle: '',
-  accent: '#00d4b2',
-  hudType: 'grid'
-});
+await sharp(local + 'nH3FCu8c.png')
+  .resize(1440, 860, { fit: 'cover', position: 'centre' })
+  .modulate({ brightness: 1.06, saturation: 1.06 })
+  .webp({ quality: 90 })
+  .toFile('assets/hero-industrial.webp');
 
 // 4. Build 6 Solution Visual Cards (Photo-designed cards with HUD overlays)
 const solutionCards = [

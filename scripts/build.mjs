@@ -193,9 +193,11 @@ add({
   <div class="container">
     <div class="hero-frame">
       <div class="hero-main-card">
-        <img class="hero-slide-bg active" src="assets/hero-space.webp" width="1440" height="860" fetchpriority="high" alt="에코플랜 3W & IPM 과학 방제 공간 이미지">
-        <img class="hero-slide-bg" src="assets/hero-lab.webp" width="1440" height="860" loading="lazy" alt="에코플랜 연구소 및 정밀 진단 이미지">
-        <img class="hero-slide-bg" src="assets/hero-industrial.webp" width="1440" height="860" loading="lazy" alt="에코플랜 HACCP 제조시설 위생관리 이미지">
+        <div class="hero-visual-window">
+          <img class="hero-slide-bg active" src="assets/hero-space.webp" width="1440" height="860" fetchpriority="high" alt="에코플랜 3W & IPM 과학 방제 공간 이미지">
+          <img class="hero-slide-bg" src="assets/hero-lab.webp" width="1440" height="860" loading="lazy" alt="에코플랜 연구소 및 정밀 진단 이미지">
+          <img class="hero-slide-bg" src="assets/hero-industrial.webp" width="1440" height="860" loading="lazy" alt="에코플랜 HACCP 제조시설 위생관리 이미지">
+        </div>
         <div class="hero-content">
           <span class="hero-badge" data-hero-badge>ECOPLAN SCIENCE · 3W & IPM</span>
           <h1 data-hero-title>보이지 않는 원인까지,<br><em>과학으로 설계하는 방제.</em></h1>
@@ -205,9 +207,9 @@ add({
             ${btn('diagnosis.html', '1분 해충 자가진단', 'ghost')}
           </div>
           <div class="hero-slide-tabs" role="tablist" aria-label="메인 배너 선택">
-            <button type="button" class="hero-tab" role="tab" aria-selected="true" data-hero-slide="0">01. 3W·IPM 과학방제</button>
-            <button type="button" class="hero-tab" role="tab" aria-selected="false" data-hero-slide="1">02. R&D·이물 정밀분석</button>
-            <button type="button" class="hero-tab" role="tab" aria-selected="false" data-hero-slide="2">03. HACCP·120개 장소케어</button>
+            <button type="button" class="hero-tab" role="tab" aria-selected="true" data-hero-slide="0">01. 3W·IPM 방제</button>
+            <button type="button" class="hero-tab" role="tab" aria-selected="false" data-hero-slide="1">02. R&D·이물분석</button>
+            <button type="button" class="hero-tab" role="tab" aria-selected="false" data-hero-slide="2">03. HACCP·장소케어</button>
           </div>
         </div>
       </div>
