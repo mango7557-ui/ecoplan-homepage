@@ -365,10 +365,9 @@ svg.icon {
 .hero-frame {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 1.12fr 0.88fr;
-  gap: 28px;
-  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .hero-main-card {
@@ -377,17 +376,19 @@ svg.icon {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: var(--shadow-lg);
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(180deg, #071936 0%, #051226 100%);
+  display: grid;
+  grid-template-columns: 1.18fr 0.82fr;
+  align-items: stretch;
+  background: linear-gradient(135deg, #071936 0%, #051226 100%);
 }
 .hero-visual-window {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9.4;
+  min-height: 380px;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #06152d;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 .hero-slide-bg {
   position: absolute;
@@ -406,7 +407,10 @@ svg.icon {
 .hero-content {
   position: relative;
   z-index: 3;
-  padding: 26px 32px 28px;
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .hero-badge {
   display: inline-flex;
@@ -467,11 +471,12 @@ svg.icon {
   border-color: var(--cyan);
 }
 
-/* Right Side Science HUD Panel */
+/* Horizontal 3-Column Hero Photo & HUD Strip */
 .hero-side-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
 }
 .hud-card {
   background: rgba(11, 31, 64, 0.78);
@@ -1945,7 +1950,7 @@ td {
 
 /* Tablet & Mobile Responsive Design */
 @media (max-width: 1120px) {
-  .hero-frame,
+  .hero-main-card,
   .curator-panel,
   .system-grid,
   .company-grid,
@@ -1954,14 +1959,48 @@ td {
   .contact-grid {
     grid-template-columns: 1fr;
   }
+  .hero-visual-window {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .hero-side-panel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .hero-side-panel::-webkit-scrollbar {
+    display: none;
+  }
+  .hero-side-panel > * {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+  }
   .concierge-bar {
     grid-template-columns: 1fr;
     gap: 14px;
   }
-  .service-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .service-grid,
+  .industry-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
   }
-  .industry-grid,
+  .service-grid::-webkit-scrollbar,
+  .industry-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .service-card,
+  .industry-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+  }
   .management-list,
   .info-cards {
     grid-template-columns: repeat(2, 1fr);
@@ -2180,9 +2219,22 @@ td {
     text-overflow: ellipsis;
   }
 
-  /* Hero Side HUD Cards */
+  /* Hero Side HUD Cards: Horizontal 1-Row Strip on Mobile */
   .hero-side-panel {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     gap: 10px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .hero-side-panel::-webkit-scrollbar {
+    display: none;
+  }
+  .hero-side-panel > * {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
   }
   .hud-card {
     padding: 16px;
@@ -2283,21 +2335,26 @@ td {
     line-height: 1.55;
   }
 
-  /* 4. Solution Curator (2x3 Grid Tabs + Compact Showcase) */
+  /* 4. Solution Curator (Horizontal 1-Row Tabs + Compact Showcase) */
   .curator-tabs {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
     gap: 8px;
-    overflow: visible;
-    white-space: normal;
     margin-bottom: 14px;
-    padding-bottom: 0;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .curator-tabs::-webkit-scrollbar {
+    display: none;
   }
   .curator-tab {
+    flex: 0 0 auto;
     justify-content: center;
-    padding: 10px 8px;
+    padding: 10px 14px;
     font-size: 12.5px;
-    border-radius: 12px;
+    border-radius: 999px;
     gap: 6px;
   }
   .curator-tab .icon {
@@ -2346,19 +2403,27 @@ td {
     width: 100%;
   }
 
-  /* 5. Pest Solutions & Place Cards: Clean 2-Column Mobile Grid */
+  /* 5. Pest Solutions & Place Cards: Horizontal 1-Row Photo Strip */
   .service-grid,
   .industry-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    overflow: visible;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    margin: 0 -14px;
+    padding: 0 14px 8px;
+    scrollbar-width: none;
+  }
+  .service-grid::-webkit-scrollbar,
+  .industry-grid::-webkit-scrollbar {
+    display: none;
   }
   .service-card,
   .industry-card {
-    border-radius: 14px;
+    flex: 0 0 76%;
+    scroll-snap-align: start;
+    border-radius: 16px;
   }
   .service-card-media,
   .industry-card-media {
