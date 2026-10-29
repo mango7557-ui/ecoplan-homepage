@@ -284,7 +284,7 @@ add({
 
 <section class="section" id="services">
   <div class="container">
-    ${sectionHeading('PEST CONTROL LINEUP', '해충별 정밀 방제 솔루션', '해충의 생활사와 서식처 특성에 맞춘 에코플랜의 4대 핵심 방제 솔루션 (모바일에서 좌우로 밀어보세요)', 'services.html', '전체 솔루션 보기')}
+    ${sectionHeading('PEST CONTROL LINEUP', '해충별 정밀 방제 솔루션', '해충의 생활사와 서식처 특성에 맞춘 에코플랜의 4대 핵심 방제 솔루션', 'services.html', '전체 솔루션 보기')}
     ${serviceCards()}
     <div class="answer-strip">
       <strong>${icon('shield')} 에코플랜 공간케어의 핵심 원칙</strong>

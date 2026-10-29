@@ -1774,78 +1774,109 @@ td {
   .info-cards {
     grid-template-columns: repeat(2, 1fr);
   }
-  .header-phone {
-    display: none;
-  }
 }
 
 @media (max-width: 820px) {
+  html {
+    scroll-padding-top: 118px;
+  }
   body {
-    padding-bottom: 78px;
+    padding-bottom: 76px;
+    font-size: 14px;
   }
   .container {
-    width: calc(100% - 32px);
+    width: calc(100% - 28px);
+  }
+  .utility .container {
+    padding: 6px 0;
+  }
+  .utility-badges {
+    font-size: 11px;
+    gap: 8px;
   }
   .utility-links {
     display: none;
   }
   .header-inner {
-    padding: 10px 0 0;
+    padding: 8px 0 0;
     gap: 6px;
   }
+  .header-top {
+    gap: 8px;
+  }
   .brand img {
-    width: 118px;
-    height: 42px;
+    width: 114px;
+    height: 40px;
   }
   .brand-sub {
     display: none;
   }
+  .header-action {
+    gap: 6px;
+  }
+  .header-phone {
+    display: inline-flex;
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+  .header-phone .icon {
+    width: 14px;
+    height: 14px;
+  }
+  .header-action .btn.small {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+  /* Logo-under 6-item Navigation Bar: fits 100% width on mobile */
   .nav {
-    display: flex;
-    position: static;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     align-items: center;
-    justify-content: space-between;
-    padding: 6px 0;
-    gap: 10px;
+    text-align: center;
+    padding: 6px 0 8px;
+    gap: 2px;
     border-top: 1px solid var(--line);
-    border-bottom: 0;
-    box-shadow: none;
-    background: transparent;
+    overflow: visible;
   }
   .nav a {
-    padding: 6px 4px;
-    border-radius: 0;
-    background: transparent;
-    font-size: 13.5px;
-    font-weight: 700;
+    padding: 6px 2px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
   }
   .nav a[aria-current="page"]::after {
-    bottom: -6px;
+    bottom: -8px;
+    left: 12%;
+    right: 12%;
   }
+
   .article-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 22px;
   }
   .toc {
     position: static;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
+    padding: 14px;
   }
   .toc strong {
     width: 100%;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    font-size: 13px;
   }
   .toc a {
     border: 1px solid var(--line);
     background: #ffffff;
-    padding: 6px 12px;
+    padding: 6px 11px;
     border-radius: 999px;
+    font-size: 12px;
   }
   .floating-contact {
     display: none;
   }
+
   /* Mobile App-Style Fixed Bottom Quick Dock */
   .mobile-dock {
     position: fixed;
@@ -1853,7 +1884,7 @@ td {
     right: 0;
     bottom: 0;
     z-index: 95;
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.97);
     border-top: 1px solid var(--line);
     backdrop-filter: blur(14px);
     display: grid;
@@ -1867,15 +1898,15 @@ td {
     align-items: center;
     justify-content: center;
     gap: 3px;
-    padding: 6px 2px;
+    padding: 5px 2px;
     font-size: 11px;
     font-weight: 700;
     color: var(--muted);
     border-radius: 10px;
   }
   .mobile-dock a .icon {
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
     color: var(--blue);
   }
   .mobile-dock a.dock-cta {
@@ -1888,101 +1919,564 @@ td {
 }
 
 @media (max-width: 600px) {
+  h2 {
+    font-size: 23px;
+    margin-bottom: 8px;
+  }
+  h3 {
+    font-size: 17px;
+  }
+  .eyebrow {
+    font-size: 10.5px;
+    margin-bottom: 8px;
+  }
+
+  /* 1. Hero Showcase Mobile Optimization */
   .hero-showcase {
-    padding: 18px 0 28px;
+    padding: 14px 0 22px;
+  }
+  .hero-frame {
+    gap: 14px;
   }
   .hero-main-card {
-    min-height: 410px;
-    padding: 24px 20px;
-    border-radius: 20px;
+    min-height: 350px;
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+  .hero-badge {
+    font-size: 10.5px;
+    padding: 4px 10px;
+    margin-bottom: 10px;
   }
   .hero-content h1 {
-    font-size: 29px;
+    font-size: 26px;
+    line-height: 1.28;
+    margin-bottom: 10px;
   }
   .hero-content p {
-    font-size: 14px;
-    margin-bottom: 18px;
+    font-size: 13px;
+    line-height: 1.62;
+    margin-bottom: 16px;
+  }
+  .hero-content .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .hero-content .actions .btn {
+    padding: 11px 10px;
+    font-size: 12.5px;
+    width: 100%;
+  }
+  .hero-slide-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .hero-tab {
+    padding: 7px 4px;
+    font-size: 11px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hero Side HUD Cards */
+  .hero-side-panel {
+    gap: 10px;
+  }
+  .hud-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .hud-header {
+    margin-bottom: 8px;
+  }
+  .hud-card h2 {
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+  .hud-card p {
+    font-size: 12.5px;
+    margin-bottom: 12px;
   }
   .hud-metrics {
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 6px;
   }
   .hud-metric {
-    padding: 10px 8px;
+    padding: 8px 6px;
     text-align: center;
+    border-radius: 10px;
   }
   .hud-metric strong {
-    font-size: 17px;
+    font-size: 16px;
+  }
+  .hud-metric span {
+    font-size: 10.5px;
   }
   .hud-photo-strip {
-    grid-template-columns: 88px 1fr;
-    padding: 12px;
+    grid-template-columns: 80px 1fr;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
   }
   .hud-photo-strip img {
-    width: 88px;
-    height: 72px;
+    width: 80px;
+    height: 66px;
+    border-radius: 10px;
   }
+  .hud-photo-strip h3 {
+    font-size: 14.5px;
+    margin-bottom: 2px;
+  }
+  .hud-photo-strip p {
+    font-size: 11.5px;
+    margin-bottom: 4px;
+    line-height: 1.45;
+  }
+
+  /* 2. Concierge Search & Tags Mobile Optimization */
   .concierge-bar {
-    padding: 18px;
-    border-radius: 18px;
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 16px;
+    gap: 12px;
   }
+  .concierge-title strong {
+    font-size: 16px;
+  }
+  .concierge-title span {
+    font-size: 12px;
+  }
+  .concierge-search {
+    padding: 4px 4px 4px 14px;
+  }
+  .concierge-search input {
+    font-size: 13px;
+  }
+  .concierge-search .btn.small {
+    padding: 9px 14px;
+    font-size: 12px;
+  }
+  .concierge-tags {
+    flex-wrap: wrap;
+    white-space: normal;
+    gap: 6px;
+  }
+  .chip-link {
+    font-size: 11.5px;
+    padding: 5px 10px;
+  }
+
+  /* 3. Section Layout & Headings */
   .section {
-    padding: 56px 0;
+    padding: 42px 0;
   }
   .section-heading {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 24px;
+    gap: 6px;
+    margin-bottom: 18px;
   }
-  /* Horizontal Touch Swipe Cards on Mobile */
+  .section-heading p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* 4. Solution Curator (2x3 Grid Tabs + Compact Showcase) */
+  .curator-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    overflow: visible;
+    white-space: normal;
+    margin-bottom: 14px;
+    padding-bottom: 0;
+  }
+  .curator-tab {
+    justify-content: center;
+    padding: 10px 8px;
+    font-size: 12.5px;
+    border-radius: 12px;
+    gap: 6px;
+  }
+  .curator-tab .icon {
+    width: 16px;
+    height: 16px;
+  }
+  .curator-panel {
+    padding: 14px;
+    border-radius: 18px;
+    gap: 14px;
+  }
+  .curator-photo {
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+  }
+  .curator-body {
+    padding: 2px;
+  }
+  .curator-body h3 {
+    font-size: 18px;
+    margin: 4px 0 8px;
+  }
+  .curator-body p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .curator-points {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .curator-points li {
+    font-size: 11.5px;
+    padding: 8px 8px;
+    gap: 5px;
+  }
+  .curator-body .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .curator-body .actions .btn {
+    padding: 11px 10px;
+    font-size: 12.5px;
+    width: 100%;
+  }
+
+  /* 5. Pest Solutions & Place Cards: Clean 2-Column Mobile Grid */
   .service-grid,
   .industry-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 14px;
-    padding-bottom: 10px;
-    margin: 0 -16px;
-    padding-left: 16px;
-    padding-right: 16px;
-    scrollbar-width: none;
-  }
-  .service-grid::-webkit-scrollbar,
-  .industry-grid::-webkit-scrollbar {
-    display: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
   }
   .service-card,
   .industry-card {
-    flex: 0 0 82%;
-    scroll-snap-align: start;
+    border-radius: 14px;
   }
-  .curator-panel {
-    padding: 18px;
-    border-radius: 20px;
+  .service-card-media,
+  .industry-card-media {
+    aspect-ratio: 14 / 10;
   }
-  .curator-points,
-  .credential-list,
-  .form-grid,
-  .management-list,
-  .info-cards {
-    grid-template-columns: 1fr;
+  .service-card-body,
+  .industry-card-body {
+    padding: 12px;
   }
-  .diagnosis-banner {
-    grid-template-columns: 1fr;
-    padding: 24px 22px;
-    gap: 16px;
+  .service-card small {
+    font-size: 9.5px;
   }
+  .service-card h3,
+  .industry-card h3 {
+    font-size: 15px;
+    margin: 4px 0 6px;
+    line-height: 1.3;
+  }
+  .service-card p,
+  .industry-card p {
+    font-size: 11.5px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .service-card .card-foot,
+  .industry-card small {
+    padding-top: 8px;
+    font-size: 11px;
+  }
+
   .answer-strip {
     flex-direction: column;
     align-items: flex-start;
-    padding: 18px;
+    padding: 14px 16px;
+    gap: 6px;
+    margin-top: 16px;
+    border-radius: 14px;
   }
-  .contact-banner .container,
+  .answer-strip strong {
+    font-size: 13px;
+  }
+  .answer-strip p {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  /* 6. Diagnosis Banner & 3W Process Section */
+  .diagnosis-banner {
+    grid-template-columns: 1fr;
+    padding: 20px 18px;
+    gap: 14px;
+    margin-top: 20px;
+    border-radius: 16px;
+  }
+  .diagnosis-banner h3 {
+    font-size: 18px;
+  }
+  .diagnosis-banner p {
+    font-size: 12.5px;
+  }
+  .diagnosis-banner .btn {
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  .system-grid {
+    gap: 24px;
+  }
+  .three-w {
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .three-w > div {
+    padding: 12px 8px;
+    border-radius: 12px;
+  }
+  .three-w strong {
+    font-size: 18px;
+  }
+  .three-w span {
+    font-size: 11px;
+  }
+  .method-tags {
+    gap: 6px;
+    margin: 14px 0;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  .steps {
+    gap: 10px;
+  }
+  .step {
+    grid-template-columns: 38px 1fr 20px;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+  .step-num {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  .step h3 {
+    font-size: 15.5px;
+  }
+  .step p {
+    font-size: 12px;
+  }
+
+  /* 7. Company, Credentials & FAQ Section */
+  .company-grid {
+    gap: 22px;
+  }
+  .credential-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .credential-list span {
+    font-size: 12px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    gap: 6px;
+  }
+  .company-copy .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .company-copy .actions .btn {
+    width: 100%;
+    padding: 11px 10px;
+    font-size: 12.5px;
+  }
+
+  .faq-layout {
+    gap: 18px;
+  }
+  .faq-bubble-card {
+    padding: 20px 18px;
+    border-radius: 18px;
+  }
+  .faq-bubble-card h2 {
+    font-size: 22px;
+  }
+  .bubble-cloud {
+    gap: 6px;
+    margin: 14px 0 18px;
+  }
+  .bubble-pill {
+    font-size: 11.5px;
+    padding: 6px 11px;
+  }
+  .faq-bubble-card .btn {
+    width: 100%;
+  }
+  .faq-list {
+    gap: 8px;
+  }
+  .faq-list details {
+    padding: 0 14px;
+    border-radius: 12px;
+  }
+  .faq-list summary {
+    padding: 15px 26px 15px 0;
+    font-size: 13.5px;
+    gap: 10px;
+  }
+  .faq-list summary > span {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+  .faq-list details > p {
+    padding: 0 4px 15px 32px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* 8. Inner Pages, Tables, Forms & Footer */
+  .page-hero {
+    padding: 6px 0 28px;
+  }
+  .breadcrumb {
+    padding: 10px 0 6px;
+    font-size: 11px;
+  }
+  .page-hero h1 {
+    font-size: 25px;
+    margin: 6px 0 10px;
+  }
+  .page-hero .lead {
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+  .page-meta {
+    font-size: 11px;
+    margin-top: 12px;
+  }
+  .article h2 {
+    font-size: 21px;
+  }
+  .article h3 {
+    font-size: 17px;
+  }
+  .article p,
+  .article li {
+    font-size: 13.5px;
+    line-height: 1.75;
+  }
+  .article section {
+    margin-bottom: 32px;
+  }
+  .answer-box {
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+  .answer-box p {
+    font-size: 13px;
+  }
+  .management-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .management-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+  .management-card h3 {
+    font-size: 15.5px;
+    margin: 6px 0;
+  }
+  .management-card p {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .info-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .info-card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+  table {
+    font-size: 12px;
+  }
+  td, th {
+    padding: 10px 10px;
+    min-width: 88px;
+  }
+  .form-panel {
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+  .check-option {
+    padding: 12px;
+    font-size: 13px;
+  }
+  .shop-image {
+    padding: 16px;
+  }
+  .shop-image img {
+    height: 230px;
+  }
+  .contact-number {
+    font-size: 32px;
+  }
+  .contact-banner {
+    padding: 38px 0;
+  }
+  .contact-banner .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .contact-banner .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .contact-banner .actions .btn {
+    width: 100%;
+    padding: 12px 10px;
+    font-size: 12.5px;
+  }
+  .footer {
+    padding: 36px 0 28px;
+  }
   .footer-top,
   .footer-info {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
+  }
+  .footer-links {
+    gap: 12px 16px;
+    font-size: 12px;
   }
 }
 
