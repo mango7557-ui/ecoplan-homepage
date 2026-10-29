@@ -1,0 +1,107 @@
+[
+  {
+    "index": 1,
+    "name": "쿠우쿠우",
+    "description": "신선한 초밥부터 다양한 디저트까지 한곳에서 즐기는 패밀리 뷔페",
+    "homepage_url": "https://www.qooqoo.co.kr/",
+    "image": "assets/partner-1.webp"
+  },
+  {
+    "index": 2,
+    "name": "153구포국수",
+    "description": "가성비와 맛을 모두 잡은 따뜻한 국수 한 그릇의 행복",
+    "homepage_url": "https://www.153gupo.com/",
+    "image": "assets/partner-2.webp"
+  },
+  {
+    "index": 3,
+    "name": "(주)티오피퍼니쳐",
+    "description": "트렌디한 디자인과 뛰어난 실용성을 겸비한 프리미엄 가구 브랜드",
+    "homepage_url": "https://www.topbiz.co.kr/",
+    "image": "assets/partner-3.webp"
+  },
+  {
+    "index": 4,
+    "name": "도라보울",
+    "description": "삿포로 수프카레 맛집 도라보울",
+    "homepage_url": "https://naver.me/x8tpFTW8",
+    "image": "assets/partner-4.webp"
+  },
+  {
+    "index": 5,
+    "name": "육회로",
+    "description": "신선함이 살아있는 한우 육회 미식 여정",
+    "homepage_url": "https://naver.me/G58g2JGy",
+    "image": "assets/partner-5.webp"
+  },
+  {
+    "index": 6,
+    "name": "(주)트루맨엠앤엘",
+    "description": "지속 가능한 미래를 만드는 고품질 비닐 및 맞춤형 포장재 제조 전문",
+    "homepage_url": "https://naver.me/FjCCFvmt",
+    "image": "assets/partner-6.webp"
+  },
+  {
+    "index": 7,
+    "name": "이가네양꼬치",
+    "description": "육즙 가득하고 두툼한 식감의 왕양꼬치 맛집 탐방",
+    "homepage_url": "https://xn--o39a53dg0bv12b6ecs6p.kr/igane/v1/events",
+    "image": "assets/partner-7.webp"
+  },
+  {
+    "index": 8,
+    "name": "갈비명가궁",
+    "description": "전통의 깊은 맛을 담은 프리미엄 수제 갈비 전문점",
+    "homepage_url": "https://naver.me/GgW8oVeo",
+    "image": "assets/partner-8.webp"
+  },
+  {
+    "index": 9,
+    "name": "이용성국수맛집",
+    "description": "정성 가득한 깊은 육수와 쫄깃한 면발이 일품인 국수 전문점",
+    "homepage_url": "https://naver.me/GgWK2nhw",
+    "image": "assets/partner-9.webp"
+  },
+  {
+    "index": 10,
+    "name": "경성양꼬치",
+    "description": "쫄깃하고 고소한 양꼬치와 꿔바로우 맛집 탐방",
+    "homepage_url": "http://www.xn--289a59bn50a98db7m.kr/",
+    "image": "assets/partner-10.webp"
+  },
+  {
+    "index": 11,
+    "name": "광장동가온",
+    "description": "정갈한 국물과 손만두가 매력적인 광장동 대표 한식 맛집",
+    "homepage_url": "https://naver.me/x3jFbnjD",
+    "image": "assets/partner-11.webp"
+  },
+  {
+    "index": 12,
+    "name": "완미족발",
+    "description": "남녀노소 취향저격, 족발 오마카세로 즐기는 다채로운 맛",
+    "homepage_url": "https://www.xn--hg3bqc248ay9b.kr/",
+    "image": "assets/partner-12.webp"
+  },
+  {
+    "index": 13,
+    "name": "삼청동샤브가든",
+    "description": "도심 속 아름다운 정원에서 즐기는 정갈하고 건강한 샤브샤브",
+    "homepage_url": "https://samcheongdongshabu.com/",
+    "image": "assets/partner-13.webp"
+  },
+  {
+    "index": 14,
+    "name": "더블유스타일베이커리",
+    "description": "용인 보정동 카페거리의 대표 감성 베이커리 맛집",
+    "homepage_url": "https://naver.me/5wWFbouM",
+    "image": "assets/partner-14.webp"
+  },
+  {
+    "index": 15,
+    "name": "홍콩반점",
+    "description": "백종원의 레시피로 즐기는 가성비 최고의 중식 맛집",
+    "homepage_url": "https://www.theborn.co.kr/theborn_brand/%ED%99%8D%EC%BD%A9%EB%B0%98%EC%A0%90-2/",
+    "image": "assets/partner-15.webp"
+  }
+]

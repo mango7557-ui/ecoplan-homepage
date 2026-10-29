@@ -13,6 +13,7 @@ const files = [
   'process.html',
   'products-safety.html',
   'industries.html',
+  'partners.html',
   'management.html',
   'shop.html',
   'faq.html',
@@ -47,7 +48,8 @@ const files = [
   'assets/trap.webp',
   'assets/og.png',
   'assets/og-kakao.jpg',
-  'assets/favicon.svg'
+  'assets/favicon.svg',
+  ...Array.from({ length: 15 }, (_, i) => `assets/partner-${i + 1}.webp`)
 ];
 
 for (const file of files) {
@@ -105,8 +107,8 @@ for (const file of htmlFiles) {
 
 const sitemap = await readFile('sitemap.xml', 'utf8');
 const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
-if (sitemapUrls.length !== 15) {
-  throw new Error(`Expected 15 indexed URLs in sitemap.xml, got ${sitemapUrls.length}`);
+if (sitemapUrls.length !== 16) {
+  throw new Error(`Expected 16 indexed URLs in sitemap.xml, got ${sitemapUrls.length}`);
 }
 
 const robots = await readFile('robots.txt', 'utf8');

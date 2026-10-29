@@ -1,4 +1,4 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 
 await mkdir('assets', { recursive: true });
@@ -255,4 +255,42 @@ await sharp(local + 'mOGxtRG5.png')
   .png({ compressionLevel: 8 })
   .toFile('assets/og.png');
 
-console.log('Photo assets designed and generated: 22 visual assets ready in assets/');
+// 7. Fetch Partners from https://www.ecoplan.co.kr/tables/partners?limit=100
+const partnersRes = await fetch('https://www.ecoplan.co.kr/tables/partners?limit=100');
+const partnersJson = await partnersRes.json();
+const rawPartners = (partnersJson.data || []).sort((a, b) => {
+  const ta = new Date(a.created_at || 0).getTime();
+  const tb = new Date(b.created_at || 0).getTime();
+  return ta - tb;
+});
+
+const savedPartners = [];
+for (let i = 0; i < rawPartners.length; i++) {
+  const p = rawPartners[i];
+  const fileName = `partner-${i + 1}.webp`;
+  const imgStr = p.image_url || '';
+  if (imgStr.startsWith('data:image/')) {
+    const base64Data = imgStr.split(',')[1];
+    const buf = Buffer.from(base64Data, 'base64');
+    await sharp(buf)
+      .resize({ width: 720, withoutEnlargement: true })
+      .webp({ quality: 88 })
+      .toFile(`assets/${fileName}`);
+  } else if (imgStr.startsWith('http')) {
+    const buf = await fetchBuffer(imgStr);
+    await sharp(buf)
+      .resize({ width: 720, withoutEnlargement: true })
+      .webp({ quality: 88 })
+      .toFile(`assets/${fileName}`);
+  }
+  savedPartners.push({
+    index: i + 1,
+    name: p.name || '',
+    description: p.description || '',
+    homepage_url: p.homepage_url || '',
+    image: `assets/${fileName}`
+  });
+}
+await writeFile('src/partners.json', JSON.stringify(savedPartners, null, 2), 'utf8');
+
+console.log(`Photo assets designed and generated: 22 base visuals + ${savedPartners.length} partner images ready!`);
