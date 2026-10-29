@@ -1183,6 +1183,15 @@ svg.icon {
 }
 
 /* Company & R&D Showcase */
+.mid-photo-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+.mid-photo-row figure {
+  margin: 0;
+}
 .company-grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
@@ -2648,6 +2657,18 @@ td {
   }
 
   /* 7. Company, Credentials & FAQ Section */
+  .mid-photo-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .mid-photo-row .company-image {
+    border-radius: 14px;
+  }
+  .mid-photo-row .company-image figcaption {
+    padding: 8px 10px;
+    font-size: 10.5px;
+    line-height: 1.35;
+  }
   .company-grid {
     gap: 22px;
   }

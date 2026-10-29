@@ -315,32 +315,49 @@ add({
   </div>
 </section>
 
-<section class="section soft">
-  <div class="container system-grid">
-    <div class="system-copy">
-      <span class="eyebrow"><span class="dot"></span>3W ANALYSIS & ROTATION SCIENCE</span>
-      <h2>퇴치에서 끝나지 않는,<br>원인을 찾는 4단계 과학 방제.</h2>
-      <p>왜 침입하는지(Why), 어디로 들어오는지(Where), 언제 활동하는지(When) 분석하고, 피레스로이드·네오니코티노이드·CS캡슐제제 등 계열별 약제 로테이션으로 내성과 독먹이 기피를 극복합니다.</p>
-      <div class="three-w">
-        <div><strong>Why</strong><span>유인 요인 분석</span></div>
-        <div><strong>Where</strong><span>침입·서식처 추적</span></div>
-        <div><strong>When</strong><span>활동·발생 주기</span></div>
-      </div>
-      <div class="method-tags">
-        <span class="tag">IPM 통합해충관리</span>
-        <span class="tag">HACCP·GMP 프로세스</span>
-        <span class="tag">계열별 약제 로테이션</span>
-        <span class="tag">카탈라제 효소·이물분석</span>
-      </div>
-      <div class="system-visual-box">
+<section class="section soft" id="company">
+  <div class="container">
+    <div class="mid-photo-row">
+      <figure class="company-image">
+        <img src="assets/company.webp" width="1200" height="900" loading="lazy" alt="에코플랜 연구소 및 방제 전문가 서비스 이미지">
+        <figcaption>에코플랜 연구소 & 현장 방제 전문가 그룹 (Since 2008)</figcaption>
+      </figure>
+      <figure class="company-image">
         <img src="assets/technology.webp" width="1100" height="820" loading="lazy" alt="에코플랜 정밀 해충 탐지 및 방제 기술 이미지">
-      </div>
+        <figcaption>보이지 않는 곳까지 완벽하게 책임지는 에코플랜 정밀 방제</figcaption>
+      </figure>
     </div>
-    <div>
-      ${stepsHtml()}
-      <div class="inline-links">
-        ${link('process.html', '3W·IPM 전략 상세보기 ↗')}
-        ${link('products-safety.html', '사용약제·로테이션 기준 ↗')}
+
+    <div class="system-grid" style="margin-top:32px">
+      <div class="system-copy">
+        <span class="eyebrow"><span class="dot"></span>3W ANALYSIS & ROTATION SCIENCE</span>
+        <h2>퇴치에서 끝나지 않는,<br>원인을 찾는 4단계 과학 방제.</h2>
+        <p>왜 침입하는지(Why), 어디로 들어오는지(Where), 언제 활동하는지(When) 분석하고, 피레스로이드·네오니코티노이드·CS캡슐제제 등 계열별 약제 로테이션으로 내성과 독먹이 기피를 극복합니다.</p>
+        <div class="three-w">
+          <div><strong>Why</strong><span>유인 요인 분석</span></div>
+          <div><strong>Where</strong><span>침입·서식처 추적</span></div>
+          <div><strong>When</strong><span>활동·발생 주기</span></div>
+        </div>
+        <div class="method-tags">
+          <span class="tag">IPM 통합해충관리</span>
+          <span class="tag">HACCP·GMP 프로세스</span>
+          <span class="tag">계열별 약제 로테이션</span>
+          <span class="tag">카탈라제 효소·이물분석</span>
+        </div>
+        <div class="credential-list">
+          ${['법정교육 필수 수료', '방제전문가 교육 수료', '위해생물 방제사 수료', '모기 동정·관리 수료', '연 2회+ 세미나 참석', '현장 숙련 보수교육'].map(t => `<span>${icon('check')}${t}</span>`).join('')}
+        </div>
+        <div class="actions">
+          ${btn('company.html', '회사소개·전문가 그룹 보기')}
+          ${btn('process.html', '3W·IPM 전략 상세보기', 'light')}
+        </div>
+      </div>
+      <div>
+        ${stepsHtml()}
+        <div class="inline-links">
+          ${link('products-safety.html', '사용약제·로테이션 기준 ↗')}
+          ${link('shop.html', '포충기 쇼핑몰 보기 ↗')}
+        </div>
       </div>
     </div>
   </div>
@@ -350,27 +367,6 @@ add({
   <div class="container">
     ${sectionHeading('FRANCHISE & PARTNERS', '함께하는 파트너사', '좌우로 스와이프하여 에코플랜과 함께 쾌적하고 안전한 위생 환경을 만들어가는 프랜차이즈·파트너사를 확인해보세요.', 'partners.html', '파트너사 전체보기')}
     ${partnerCards(false)}
-  </div>
-</section>
-
-<section class="section soft" id="company">
-  <div class="container company-grid">
-    <figure class="company-image">
-      <img src="assets/company.webp" width="1200" height="900" loading="lazy" alt="에코플랜 연구소 및 방제 전문가 서비스 이미지">
-      <figcaption>에코플랜 연구소 & 현장 방제 전문가 그룹 (Since 2008)</figcaption>
-    </figure>
-    <div class="company-copy">
-      <span class="eyebrow"><span class="dot"></span>CERTIFIED EXPERT GROUP</span>
-      <h2>체계적인 교육을 이수한<br>방제 전문가가 직접 방문합니다.</h2>
-      <p>법정교육은 물론 방제전문가 교육, 위해생물 방제사, 모기 동정 및 관리 과정을 수료하고 매년 세미나·전시회 및 현장 보수교육을 통해 최신 방제 기술을 적용합니다.</p>
-      <div class="credential-list">
-        ${['법정교육 필수 수료', '방제전문가 교육 수료', '위해생물 방제사 수료', '모기 동정·관리 수료', '연 2회+ 세미나 참석', '현장 숙련 보수교육'].map(t => `<span>${icon('check')}${t}</span>`).join('')}
-      </div>
-      <div class="actions">
-        ${btn('company.html', '회사소개·전문가 그룹 보기')}
-        ${btn('shop.html', '포충기 쇼핑몰 보기', 'light')}
-      </div>
-    </div>
   </div>
 </section>
 
