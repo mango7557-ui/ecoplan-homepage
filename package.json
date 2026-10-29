@@ -1,0 +1,17 @@
+{
+  "name": "ecoplan-space-care",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "node scripts/prepare-assets.mjs",
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "check": "node scripts/check.mjs",
+    "test:browser": "node scripts/browser-check.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1",
+    "sharp": "^0.34.4"
+  }
+}

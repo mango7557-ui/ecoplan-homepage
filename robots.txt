@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /src/
+Disallow: /scripts/
+Disallow: /docs/
+Disallow: /node_modules/
+Disallow: /test-results/
+
+Sitemap: https://www.ecoplan.co.kr/sitemap.xml
