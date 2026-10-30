@@ -1,0 +1,42 @@
+[
+  {
+    "id": "6d8171ba-b15b-4d76-8554-da1a4006a2f9",
+    "index": 1,
+    "name": "스마트캐치 루미오키퍼 UV LED 야외용 아파트 포충기 포충등 날 파리 벌레 퇴치기",
+    "category": "야외·단지용 포충기",
+    "price": 1210000,
+    "description": "스마트캐치 루미오키퍼 UV LED 야외용 아파트 포충기 포충등 날 파리 벌레 퇴치기",
+    "link_url": "https://smartstore.naver.com/smartcatch/products/11890617482",
+    "image": "assets/shop-1.webp"
+  },
+  {
+    "id": "a30099e5-1bb2-4366-9ab9-960e01d37238",
+    "index": 2,
+    "name": "스마트캐치 루미오 UV LED 해충 퇴치기 벌레 날 파리 벌레 업소용 유인 포충기 포충등",
+    "category": "업소·매장용 포충기",
+    "price": 154000,
+    "description": "스마트캐치 루미오 UV LED 해충 퇴치기 벌레 날 파리 벌레 업소용 유인 포충기 포충등",
+    "link_url": "https://smartstore.naver.com/smartcatch/products/11862714425",
+    "image": "assets/shop-2.webp"
+  },
+  {
+    "id": "2aac79e5-f2d2-432b-b39b-279d25ddc736",
+    "index": 3,
+    "name": "포커스 날파리 퇴치기 모기 벌레 해충 화장실 업소용 포충기 포충등 플라이 모스 장사의신",
+    "category": "소형·화장실용 포충기",
+    "price": 143000,
+    "description": "포커스 날파리 퇴치기 모기 벌레 해충 화장실 업소용 포충기 포충등 플라이 모스 장사의신",
+    "link_url": "https://smartstore.naver.com/smartcatch/products/277555461",
+    "image": "assets/shop-3.webp"
+  },
+  {
+    "id": "adcaa3db-fea7-410a-b80f-3528dbd4a411",
+    "index": 4,
+    "name": "스마트캐치 알파 해충 퇴치기 업소용 날 파리 퇴치기 포충기 포충등 유인 BL램프",
+    "category": "업소·매장용 포충기",
+    "price": 187000,
+    "description": "스마트캐치 알파 해충 퇴치기 업소용 날 파리 퇴치기 포충기 포충등 유인 BL램프",
+    "link_url": "https://smartstore.naver.com/smartcatch/products/4054811651?nl-ts-pid=jl7cwsqoieKssTZNCTV-170087",
+    "image": "assets/shop-4.webp"
+  }
+]

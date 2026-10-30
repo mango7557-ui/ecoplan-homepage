@@ -1,0 +1,1230 @@
+export function buildAdminHtml({ partners, shopProducts, company }) {
+  const defaultData = {
+    navItems: [
+      { label: '회사소개', href: 'company.html', visible: true },
+      { label: '서비스소개', href: 'services.html', visible: true },
+      { label: '파트너사', href: 'partners.html', visible: true },
+      { label: '관리현황', href: 'management.html', visible: true },
+      { label: '쇼핑몰', href: 'shop.html', visible: true },
+      { label: '상담신청', href: 'contact.html', visible: true },
+      { label: 'FAQ', href: 'faq.html', visible: true }
+    ],
+    shopCategories: ['업소·매장용 포충기', '야외·단지용 포충기', '소형·화장실용 포충기'],
+    sections: [
+      { id: 'hero', name: '01. 메인 히어로 배너 & 고민 검색바', visible: true, eyebrow: '', title: '', desc: '' },
+      { id: 'curator', name: '02. 문제별 맞춤 솔루션 큐레이터', visible: true, eyebrow: 'CUSTOM SOLUTION CURATOR', title: '어떤 문제를 해결하고 싶나요?', desc: '해충 퇴치부터 바이러스 살균, HACCP 위생관리, 이물분석까지 최적의 솔루션을 제안합니다.' },
+      { id: 'services', name: '03. 해충별 정밀 방제 솔루션 (4대 해충)', visible: true, eyebrow: 'PEST CONTROL LINEUP', title: '해충별 정밀 방제 솔루션', desc: '해충의 생활사와 서식처 특성에 맞춘 에코플랜의 4대 핵심 방제 솔루션' },
+      { id: 'places', name: '04. 장소별 맞춤 추천 (6대 업종)', visible: true, eyebrow: 'SOLUTIONS BY PLACE', title: '어느 곳에 에코플랜이 필요한가요?', desc: '화장실·탕비실·주방·하역장 등 120개 세부 장소 유형과 업종별 기준에 맞춘 맞춤 솔루션을 제공합니다.' },
+      { id: 'company', name: '05. 에코플랜 연구소·전문가 그룹 & 4단계 방제', visible: true, eyebrow: '3W ANALYSIS & ROTATION SCIENCE', title: '퇴치에서 끝나지 않는,<br>원인을 찾는 4단계 과학 방제.', desc: '' },
+      { id: 'partners', name: '06. 함께하는 파트너사 슬라이드', visible: true, eyebrow: 'FRANCHISE & PARTNERS', title: '함께하는 파트너사', desc: '좌우로 스와이프하여 에코플랜과 함께 쾌적하고 안전한 위생 환경을 만들어가는 프랜차이즈·파트너사를 확인해보세요.' },
+      { id: 'shop', name: '07. 에코플랜 포충기 쇼핑몰 진열', visible: true, eyebrow: 'ECOPLAN SHOPPING MALL', title: '에코플랜 포충기 쇼핑몰', desc: '공간 특성에 맞춘 고효율 UV LED·BL램프 유인 포충기 라인업을 확인하고 바로 구매하실 수 있습니다.' },
+      { id: 'faq', name: '08. 자주 묻는 질문 (FAQ)', visible: true, eyebrow: 'ECOPLAN FAQ', title: '많이 찾는 질문,<br>빠르게 확인하세요!', desc: '' }
+    ],
+    heroSlides: [
+      {
+        tabLabel: '01. 3W·IPM 방제',
+        badge: 'ECOPLAN SCIENCE · 3W & IPM',
+        title: '보이지 않는 원인까지,<br><em>과학으로 설계하는 방제.</em>',
+        desc: '해충의 실내 유인 요인(Why), 침입 경로(Where), 활동 시간(When)을 추적하는 3W 분석과 IPM 통합방제로 공간을 지킵니다.'
+      },
+      {
+        tabLabel: '02. R&D·이물분석',
+        badge: 'R&D LAB · BIO & ALIEN ANALYSIS',
+        title: '효소·유전자·이물까지,<br><em>데이터로 검증하는 연구소.</em>',
+        desc: '계열별 약제 로테이션 설계부터 카탈라제 효소실험, 제3자 기관 유전자·이물분석까지 객관적 근거로 관리합니다.'
+      },
+      {
+        tabLabel: '03. HACCP·장소케어',
+        badge: 'HACCP · GMP · 120 PLACES',
+        title: '가정집부터 제조공장까지,<br><em>120개 장소별 맞춤 케어.</em>',
+        desc: '외식 프랜차이즈, HACCP·GMP·GSP 제조시설, 빌딩, 병원, 공동주택의 구조에 맞춘 공간케어 솔루션을 제안합니다.'
+      }
+    ],
+    imageCatalog: [
+      { key: 'assets/logo.webp', label: '상단/하단 브랜드 로고' },
+      { key: 'assets/hero-space.webp', label: '메인 히어로 1번 사진 (3W·IPM 과학방제)' },
+      { key: 'assets/hero-lab.webp', label: '메인 히어로 2번 사진 (R&D·연구소)' },
+      { key: 'assets/hero-industrial.webp', label: '메인 히어로 3번 사진 (HACCP·장소케어)' },
+      { key: 'assets/company.webp', label: '중간 섹션 좌측 사진 (에코플랜 연구소 4분할)' },
+      { key: 'assets/technology.webp', label: '중간 섹션 우측 사진 (보이지 않는 곳까지 완벽하게)' },
+      { key: 'assets/franchise.webp', label: '히어로 하단 프랜차이즈 방역 사진' },
+      { key: 'assets/sol-cockroach.webp', label: '해충방제 1: 바퀴벌레 솔루션 사진' },
+      { key: 'assets/sol-rodent.webp', label: '해충방제 2: 쥐 방서 솔루션 사진' },
+      { key: 'assets/sol-flying.webp', label: '해충방제 3: 파리·초파리·나방파리 사진' },
+      { key: 'assets/sol-mosquito.webp', label: '해충방제 4: 모기 유충·성충 사진' },
+      { key: 'assets/sol-disinfect.webp', label: '큐레이터: 바이러스 살균소독 사진' },
+      { key: 'assets/sol-analysis.webp', label: '큐레이터: 이물·효소 정밀분석 사진' },
+      { key: 'assets/place-restaurant.webp', label: '장소별 1: 음식점·카페 사진' },
+      { key: 'assets/place-factory.webp', label: '장소별 2: 식품·제조시설 사진' },
+      { key: 'assets/place-building.webp', label: '장소별 3: 빌딩·공공기관 사진' },
+      { key: 'assets/place-hospital.webp', label: '장소별 4: 병원·호텔 사진' },
+      { key: 'assets/place-home.webp', label: '장소별 5: 주택·공동주택 사진' },
+      { key: 'assets/place-retail.webp', label: '장소별 6: 상업·유통시설 사진' },
+      { key: 'assets/trap.webp', label: '쇼핑몰: 스마트캐치 알파 포충기 사진' }
+    ],
+    partners,
+    shopProducts,
+    companyInfo: {
+      legalName: company.legalName,
+      representative: company.representative,
+      phone: company.phone,
+      email: company.email,
+      address: company.address,
+      businessId: company.businessId
+    }
+  };
+
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>에코플랜 통합 관리자 시스템 (CMS)</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #003da5;
+      --blue-dark: #061836;
+      --blue-soft: #eaf2ff;
+      --cyan: #00b89c;
+      --ink: #0b1b32;
+      --muted: #55667e;
+      --line: #dce5f2;
+      --bg: #f3f6fb;
+      --danger: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    /* Login Screen */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: radial-gradient(circle at 80% 20%, #0d3b8c 0%, #061836 60%, #030b1a 100%);
+    }
+    .login-card {
+      width: min(440px, 100%);
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px 32px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+    .login-card h1 { margin: 0 0 6px; font-size: 26px; color: var(--blue); }
+    .login-card p { margin: 0 0 24px; color: var(--muted); font-size: 13px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f9fbff;
+      font-size: 14px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--blue);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.18s;
+    }
+    .btn:hover { opacity: 0.94; transform: translateY(-1px); }
+    .btn.cyan { background: var(--cyan); }
+    .btn.light { background: #ffffff; color: var(--ink); border-color: var(--line); }
+    .btn.danger { background: #fee2e2; color: var(--danger); border-color: #fecaca; }
+    .btn.small { padding: 7px 12px; font-size: 12px; border-radius: 9px; }
+
+    /* Admin Layout */
+    .admin-app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+    .admin-sidebar {
+      background: var(--blue-dark);
+      color: #ffffff;
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-brand {
+      padding: 6px 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      margin-bottom: 8px;
+    }
+    .sidebar-brand strong { display: block; font-size: 20px; color: #4bf0d4; }
+    .sidebar-brand span { font-size: 11.5px; color: #9ab2d6; }
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 0;
+      background: transparent;
+      color: #c5d7f2;
+      font-weight: 700;
+      font-size: 13.5px;
+    }
+    .nav-tab:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .nav-tab.active {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 184, 156, 0.25);
+    }
+    .admin-main {
+      padding: 26px 32px 60px;
+      max-width: 1280px;
+      width: 100%;
+    }
+    .admin-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      background: #ffffff;
+      padding: 16px 22px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+    .admin-topbar h2 { margin: 0; font-size: 20px; }
+    .panel {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 6px 20px rgba(8,28,66,0.04);
+    }
+    .panel h3 { margin: 0 0 6px; font-size: 18px; }
+    .panel p.sub { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .item-list { display: grid; gap: 12px; }
+    .item-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfdff;
+    }
+    .item-thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .img-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .img-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+    .img-card-preview {
+      aspect-ratio: 16 / 10;
+      background: #071426;
+      overflow: hidden;
+    }
+    .img-card-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .img-card-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .page-edit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .page-edit-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      background: #f9fbff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #061836;
+      color: #4bf0d4;
+      border: 1px solid #00b89c;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-weight: 800;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+      z-index: 999;
+    }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 860px) {
+      .admin-app { grid-template-columns: 1fr; }
+      .admin-sidebar {
+        position: static;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 12px;
+        white-space: nowrap;
+      }
+      .sidebar-brand { display: none; }
+      .nav-tab { width: auto; padding: 9px 13px; font-size: 12.5px; }
+      .admin-main { padding: 14px; }
+      .grid-2, .grid-3, .img-grid, .page-edit-grid { grid-template-columns: 1fr; }
+      .item-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login View -->
+  <div id="login-view" class="login-wrap">
+    <div class="login-card">
+      <span class="badge" style="margin-bottom:10px">ECOPLAN CMS v2.0</span>
+      <h1>에코플랜 통합 관리자</h1>
+      <p>쇼핑몰 상품, 파트너사, 카테고리 메뉴, 모든 섹션과 사진·글씨를 한곳에서 관리합니다.</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="admin-id">관리자 아이디</label>
+          <input id="admin-id" type="text" value="01089807611" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-pw">비밀번호</label>
+          <input id="admin-pw" type="password" value="1234" required>
+        </div>
+        <button type="submit" class="btn" style="width:100%;padding:14px;margin-top:6px">관리자 로그인</button>
+      </form>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:12px;color:var(--muted)">
+        <span>기본 계정: 01089807611 / 1234</span>
+        <a href="index.html" style="color:var(--blue);font-weight:700">← 홈페이지 메인으로</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard View -->
+  <div id="admin-view" class="admin-app" hidden>
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <strong>ECOPLAN CMS</strong>
+        <span>올인원 사이트 관리 시스템</span>
+      </div>
+      <button type="button" class="nav-tab active" data-tab="shop">🛒 쇼핑몰 상품 관리</button>
+      <button type="button" class="nav-tab" data-tab="partners">🤝 파트너사 관리</button>
+      <button type="button" class="nav-tab" data-tab="categories">🗂️ 카테고리 · 메뉴 관리</button>
+      <button type="button" class="nav-tab" data-tab="sections">🧩 모든 섹션 관리</button>
+      <button type="button" class="nav-tab" data-tab="images">🖼️ 모든 사진 수정</button>
+      <button type="button" class="nav-tab" data-tab="texts">✍️ 모든 글씨 수정</button>
+      <button type="button" class="nav-tab" data-tab="inquiries">📋 상담 · 주문 내역</button>
+      <button type="button" class="nav-tab" data-tab="backup">⚙️ 백업 · 초기화</button>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h2 id="current-tab-title">🛒 쇼핑몰 상품 관리</h2>
+          <span style="font-size:12px;color:var(--muted)">변경사항은 저장 즉시 홈페이지 전체에 반영됩니다.</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="index.html?edit=1" class="btn cyan small">✏️ 홈페이지 직접 클릭 편집모드 열기</a>
+          <a href="index.html" target="_blank" class="btn light small">홈페이지 새창 보기 ↗</a>
+          <button type="button" id="logout-btn" class="btn danger small">로그아웃</button>
+        </div>
+      </div>
+
+      <!-- TAB 1: SHOP PRODUCTS -->
+      <section class="admin-panel" data-panel="shop">
+        <div class="panel">
+          <h3 id="shop-form-heading">새 쇼핑몰 상품 등록</h3>
+          <p class="sub">포충기 및 위생용품의 사진, 카테고리, 가격, 스마트스토어 구매 링크와 설명을 등록·수정합니다.</p>
+          <form id="shop-form">
+            <input type="hidden" id="shop-id">
+            <div class="grid-3">
+              <div class="form-group">
+                <label>상품명 *</label>
+                <input type="text" id="shop-name" required placeholder="예: 스마트캐치 알파 포충기">
+              </div>
+              <div class="form-group">
+                <label>상품 카테고리 *</label>
+                <select id="shop-category"></select>
+              </div>
+              <div class="form-group">
+                <label>판매 가격 (원) *</label>
+                <input type="number" id="shop-price" required placeholder="예: 187000">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>구매 링크 (스마트스토어 등 URL)</label>
+                <input type="url" id="shop-link" placeholder="https://smartstore.naver.com/...">
+              </div>
+              <div class="form-group">
+                <label>상품 사진 업로드 (또는 이미지 URL)</label>
+                <input type="file" id="shop-file" accept="image/*">
+                <input type="text" id="shop-img-url" placeholder="직접 이미지 경로/URL 입력 시 사용 (선택)" style="margin-top:6px">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>상품 설명 *</label>
+              <textarea id="shop-desc" rows="2" required placeholder="상품 주요 특징을 입력하세요."></textarea>
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button type="button" id="shop-cancel" class="btn light" hidden>수정 취소</button>
+              <button type="submit" class="btn">상품 저장하기</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+            <h3 style="margin:0">등록된 쇼핑몰 상품 목록 (<span id="shop-count">0</span>개)</h3>
+            <div style="display:flex;align-items:center;gap:8px">
+              <label style="font-size:12px;font-weight:700">진열 정렬:</label>
+              <select id="shop-sort-select" style="padding:7px 10px;border-radius:8px;border:1px solid var(--line)">
+                <option value="-created_at">기본 등록순</option>
+                <option value="created_at">역순</option>
+                <option value="price">가격 낮은순</option>
+                <option value="-price">가격 높은순</option>
+              </select>
+            </div>
+          </div>
+          <div id="shop-list" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- TAB 2: PARTNERS -->
+      <section class="admin-panel" data-panel="partners" hidden>
+        <div class="panel">
+          <h3 id="partner-form-heading">새 파트너사 등록</h3>
+          <p class="sub">메인 페이지와 파트너사 페이지에 노출될 프랜차이즈·협력기업 포스터와 링크를 관리합니다.</p>
+          <form id="partner-form">
+            <input type="hidden" id="partner-idx">
+            <div class="grid-2">
+              <div class="form-group">
+                <label>파트너사명 *</label>
+                <input type="text" id="partner-name" required placeholder="예: 쿠우쿠우">
+              </div>
+              <div class="form-group">
+                <label>공식 홈페이지 / 플레이스 URL</label>
+                <input type="url" id="partner-url" placeholder="https://...">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>파트너 포스터/로고 사진 업로드</label>
+                <input type="file" id="partner-file" accept="image/*">
+              </div>
+              <div class="form-group">
+                <label>또는 이미지 경로/URL 직접 입력</label>
+                <input type="text" id="partner-img-url" placeholder="assets/partner-1.webp">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>파트너사 한줄 소개 *</label>
+              <input type="text" id="partner-desc" required placeholder="예: 신선한 초밥부터 다양한 디저트까지 즐기는 패밀리 뷔페">
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button type="button" id="partner-cancel" class="btn light" hidden>수정 취소</button>
+              <button type="submit" class="btn">파트너사 저장하기</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+            <h3 style="margin:0">등록된 파트너사 목록 (<span id="partner-count">0</span>곳)</h3>
+            <div style="display:flex;align-items:center;gap:8px">
+              <label style="font-size:12px;font-weight:700">정렬 기준:</label>
+              <select id="partner-sort-select" style="padding:7px 10px;border-radius:8px;border:1px solid var(--line)">
+                <option value="created_at">등록순 (기본)</option>
+                <option value="-created_at">최신 등록순</option>
+                <option value="name">가나다 이름순</option>
+              </select>
+            </div>
+          </div>
+          <div id="partner-list" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- TAB 3: CATEGORIES & MENU -->
+      <section class="admin-panel" data-panel="categories" hidden>
+        <div class="panel">
+          <h3>상단 메뉴바 (카테고리) 관리</h3>
+          <p class="sub">로고 아래에 표시되는 상단 메뉴의 이름을 바꾸거나 순서를 이동하고, 새 메뉴를 추가·숨김 처리할 수 있습니다.</p>
+          <div id="nav-manager-list" class="item-list" style="margin-bottom:16px"></div>
+          <form id="add-nav-form" class="grid-3" style="align-items:end;border-top:1px solid var(--line);padding-top:16px">
+            <div class="form-group" style="margin:0">
+              <label>새 메뉴 이름</label>
+              <input type="text" id="new-nav-label" required placeholder="예: 이벤트">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>이동할 페이지 또는 링크</label>
+              <input type="text" id="new-nav-href" required placeholder="예: contact.html">
+            </div>
+            <button type="submit" class="btn">+ 상단 메뉴 추가</button>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h3>쇼핑몰 상품 카테고리 관리</h3>
+          <p class="sub">쇼핑몰 페이지의 분류 탭과 상품 등록 카테고리를 관리합니다.</p>
+          <div id="shop-cat-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"></div>
+          <form id="add-cat-form" style="display:flex;gap:8px">
+            <input type="text" id="new-cat-name" required placeholder="새 쇼핑몰 카테고리명 입력 (예: 포충등 소모품)" style="flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:10px">
+            <button type="submit" class="btn">+ 카테고리 추가</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: ALL SECTIONS -->
+      <section class="admin-panel" data-panel="sections" hidden>
+        <div class="panel">
+          <h3>메인 페이지 전체 섹션 관리 (노출 ON/OFF · 순서 · 제목/부제 수정)</h3>
+          <p class="sub">각 섹션의 표시 여부를 켜고 끄거나, 위/아래 버튼으로 섹션 순서를 바꾸고, 섹션의 영문 배지·제목·설명을 직접 수정할 수 있습니다.</p>
+          <div id="section-manager-list" class="item-list"></div>
+          <div style="margin-top:16px;text-align:right">
+            <button type="button" id="save-sections-btn" class="btn">섹션 설정 일괄 저장하기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: ALL IMAGES -->
+      <section class="admin-panel" data-panel="images" hidden>
+        <div class="panel">
+          <h3>홈페이지 모든 사진 수정 (이미지 매니저)</h3>
+          <p class="sub">로고, 메인 히어로 배너, 연구소·기술 사진, 해충별 카드 사진, 장소별 사진 등 원하는 사진을 새 이미지 파일로 즉시 교체할 수 있습니다.</p>
+          <div id="image-manager-grid" class="img-grid"></div>
+        </div>
+      </section>
+
+      <!-- TAB 6: ALL TEXTS & LIVE VISUAL EDITOR -->
+      <section class="admin-panel" data-panel="texts" hidden>
+        <div class="panel" style="background:linear-gradient(135deg,#061836,#003da5);color:#fff">
+          <h3 style="color:#fff">✏️ 페이지별 실시간 클릭 비주얼 편집기</h3>
+          <p class="sub" style="color:#cfe2ff">원하는 페이지의 [실시간 클릭 편집] 버튼을 누르면 해당 페이지가 열리며, 화면에 보이는 모든 글씨를 클릭해 타이핑으로 고치고 모든 사진을 클릭해 바로 바꿀 수 있습니다!</p>
+          <div class="page-edit-grid">
+            ${[
+              ['index.html', '메인 홈페이지'],
+              ['company.html', '회사소개 페이지'],
+              ['services.html', '서비스소개 페이지'],
+              ['partners.html', '파트너사 페이지'],
+              ['management.html', '관리현황 페이지'],
+              ['shop.html', '쇼핑몰 페이지'],
+              ['industries.html', '장소별 추천 페이지'],
+              ['process.html', '3W·IPM 프로세스'],
+              ['products-safety.html', '사용약제·안전 페이지'],
+              ['diagnosis.html', '해충 자가진단 페이지'],
+              ['contact.html', '상담신청 페이지'],
+              ['faq.html', 'FAQ 페이지']
+            ].map(([file, name]) => `<div class="page-edit-card" style="background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:#fff"><strong>${name}</strong><a href="${file}?edit=1" class="btn cyan small">실시간 클릭 편집 ↗</a></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>메인 히어로 슬라이드 (1번 · 2번 · 3번) 문구 수정</h3>
+          <p class="sub">메인 상단 배너의 1번·2번·3번 탭 이름과 배지, 큰 제목, 설명 문구를 수정합니다.</p>
+          <form id="hero-text-form">
+            <div id="hero-text-fields" class="item-list"></div>
+            <div style="margin-top:16px;text-align:right">
+              <button type="submit" class="btn">히어로 슬라이드 문구 저장</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <h3>기업 기본 정보 및 대표 연락처 수정</h3>
+          <form id="company-info-form" class="grid-2">
+            <div class="form-group">
+              <label>상호명</label>
+              <input type="text" id="info-legalName">
+            </div>
+            <div class="form-group">
+              <label>대표자명</label>
+              <input type="text" id="info-rep">
+            </div>
+            <div class="form-group">
+              <label>대표 전화번호 (헤더·푸터·상담페이지 자동 반영)</label>
+              <input type="text" id="info-phone">
+            </div>
+            <div class="form-group">
+              <label>대표 이메일</label>
+              <input type="email" id="info-email">
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label>사업장 주소</label>
+              <input type="text" id="info-address">
+            </div>
+            <div style="grid-column:1/-1;text-align:right">
+              <button type="submit" class="btn">기업 정보 저장</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 7: INQUIRIES -->
+      <section class="admin-panel" data-panel="inquiries" hidden>
+        <div class="panel">
+          <h3>상담 및 문의 접수 내역</h3>
+          <p class="sub">상담신청 페이지에서 작성된 문의 내역을 확인하고 처리 상태를 관리합니다.</p>
+          <div id="inquiry-list" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- TAB 8: BACKUP & RESET -->
+      <section class="admin-panel" data-panel="backup" hidden>
+        <div class="panel">
+          <h3>사이트 설정 데이터 백업 · 복원 · 초기화</h3>
+          <p class="sub">관리자에서 수정한 모든 상품, 파트너사, 사진, 글씨, 메뉴 설정을 JSON 파일로 백업하거나 복원할 수 있습니다.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button type="button" id="export-cms-btn" class="btn">📥 현재 설정 JSON 다운로드 (백업)</button>
+            <label class="btn light" style="cursor:pointer">
+              📤 백업 JSON 파일 불러오기
+              <input type="file" id="import-cms-file" accept=".json" style="display:none">
+            </label>
+            <button type="button" id="reset-cms-btn" class="btn danger">⚠️ 모든 수정사항 초기값으로 복원</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" hidden>저장되었습니다.</div>
+
+  <script>
+    const DEFAULT_CMS = ${JSON.stringify(defaultData).replace(/</g, '\\u003c')};
+
+    function loadCms() {
+      try {
+        const raw = localStorage.getItem('ecoplan_cms_v1');
+        if (!raw) return structuredClone(DEFAULT_CMS);
+        const parsed = JSON.parse(raw);
+        return {
+          ...structuredClone(DEFAULT_CMS),
+          ...parsed,
+          navItems: Array.isArray(parsed.navItems) && parsed.navItems.length ? parsed.navItems : structuredClone(DEFAULT_CMS.navItems),
+          shopCategories: Array.isArray(parsed.shopCategories) && parsed.shopCategories.length ? parsed.shopCategories : structuredClone(DEFAULT_CMS.shopCategories),
+          sections: Array.isArray(parsed.sections) && parsed.sections.length ? parsed.sections : structuredClone(DEFAULT_CMS.sections),
+          heroSlides: Array.isArray(parsed.heroSlides) && parsed.heroSlides.length === 3 ? parsed.heroSlides : structuredClone(DEFAULT_CMS.heroSlides),
+          partners: Array.isArray(parsed.partners) ? parsed.partners : structuredClone(DEFAULT_CMS.partners),
+          shopProducts: Array.isArray(parsed.shopProducts) ? parsed.shopProducts : structuredClone(DEFAULT_CMS.shopProducts),
+          companyInfo: { ...DEFAULT_CMS.companyInfo, ...(parsed.companyInfo || {}) },
+          images: parsed.images || {},
+          consultations: parsed.consultations || []
+        };
+      } catch {
+        return structuredClone(DEFAULT_CMS);
+      }
+    }
+
+    let cms = loadCms();
+
+    function saveCms(msg = '변경사항이 저장되었습니다! 홈페이지에 즉시 반영됩니다.') {
+      localStorage.setItem('ecoplan_cms_v1', JSON.stringify(cms));
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.hidden = false;
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Login Handling
+    const loginView = document.getElementById('login-view');
+    const adminView = document.getElementById('admin-view');
+    function checkAuth() {
+      if (sessionStorage.getItem('ecoplan_admin_logged') === '1') {
+        loginView.hidden = true;
+        adminView.hidden = false;
+        renderAll();
+      }
+    }
+    document.getElementById('login-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value.trim();
+      const pw = document.getElementById('admin-pw').value.trim();
+      if (id === '01089807611' && pw === '1234') {
+        sessionStorage.setItem('ecoplan_admin_logged', '1');
+        checkAuth();
+      } else {
+        alert('아이디 또는 비밀번호를 확인해주세요. (기본: 01089807611 / 1234)');
+      }
+    });
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      sessionStorage.removeItem('ecoplan_admin_logged');
+      location.reload();
+    });
+
+    // Tab Navigation
+    document.querySelectorAll('[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b === btn));
+        document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== tab; });
+        document.getElementById('current-tab-title').textContent = btn.textContent;
+      });
+    });
+
+    // 1. Render Shop Products
+    function renderShop() {
+      const catSelect = document.getElementById('shop-category');
+      catSelect.innerHTML = cms.shopCategories.map(c => '<option value="' + c + '">' + c + '</option>').join('');
+      document.getElementById('shop-count').textContent = cms.shopProducts.length;
+      document.getElementById('shop-sort-select').value = cms.shopSort || '-created_at';
+
+      const listEl = document.getElementById('shop-list');
+      if (!cms.shopProducts.length) {
+        listEl.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">등록된 상품이 없습니다.</p>';
+        return;
+      }
+      listEl.innerHTML = cms.shopProducts.map((item, idx) => \`
+        <div class="item-row">
+          <img class="item-thumb" src="\${item.image}" alt="\${item.name}">
+          <div>
+            <span class="badge">\${item.category || '업소·매장용 포충기'}</span>
+            <strong style="display:block;font-size:15px;margin:4px 0">\${item.name}</strong>
+            <span style="color:#e6002d;font-weight:800">\${Number(item.price || 0).toLocaleString('ko-KR')}원</span>
+            <p style="margin:4px 0 0;font-size:12px;color:var(--muted)">\${item.description || ''}</p>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button type="button" class="btn light small" onclick="editShop(\${idx})">수정</button>
+            <button type="button" class="btn danger small" onclick="deleteShop(\${idx})">삭제</button>
+          </div>
+        </div>
+      \`).join('');
+    }
+
+    window.editShop = idx => {
+      const item = cms.shopProducts[idx];
+      if (!item) return;
+      document.getElementById('shop-id').value = String(idx);
+      document.getElementById('shop-name').value = item.name;
+      document.getElementById('shop-category').value = item.category || cms.shopCategories[0];
+      document.getElementById('shop-price').value = item.price;
+      document.getElementById('shop-link').value = item.link_url || '';
+      document.getElementById('shop-img-url').value = item.image || '';
+      document.getElementById('shop-desc').value = item.description || '';
+      document.getElementById('shop-form-heading').textContent = '쇼핑몰 상품 수정';
+      document.getElementById('shop-cancel').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.deleteShop = idx => {
+      if (!confirm('이 상품을 삭제하시겠습니까?')) return;
+      cms.shopProducts.splice(idx, 1);
+      saveCms('상품이 삭제되었습니다.');
+      renderShop();
+    };
+
+    document.getElementById('shop-cancel').addEventListener('click', () => {
+      document.getElementById('shop-form').reset();
+      document.getElementById('shop-id').value = '';
+      document.getElementById('shop-form-heading').textContent = '새 쇼핑몰 상품 등록';
+      document.getElementById('shop-cancel').hidden = true;
+    });
+
+    document.getElementById('shop-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const idxVal = document.getElementById('shop-id').value;
+      const file = document.getElementById('shop-file').files[0];
+      let image = document.getElementById('shop-img-url').value.trim() || 'assets/trap.webp';
+      if (file) image = await readFileAsDataUrl(file);
+
+      const newItem = {
+        id: 'shop-' + Date.now(),
+        name: document.getElementById('shop-name').value.trim(),
+        category: document.getElementById('shop-category').value,
+        price: Number(document.getElementById('shop-price').value || 0),
+        link_url: document.getElementById('shop-link').value.trim(),
+        description: document.getElementById('shop-desc').value.trim(),
+        image
+      };
+
+      if (idxVal !== '') {
+        cms.shopProducts[Number(idxVal)] = newItem;
+      } else {
+        cms.shopProducts.unshift(newItem);
+      }
+      saveCms('쇼핑몰 상품이 저장되었습니다!');
+      document.getElementById('shop-cancel').click();
+      renderShop();
+    });
+
+    document.getElementById('shop-sort-select').addEventListener('change', e => {
+      cms.shopSort = e.target.value;
+      saveCms('쇼핑몰 진열 순서가 변경되었습니다.');
+    });
+
+    // 2. Render Partners
+    function renderPartners() {
+      document.getElementById('partner-count').textContent = cms.partners.length;
+      document.getElementById('partner-sort-select').value = cms.partnerSort || 'created_at';
+      const listEl = document.getElementById('partner-list');
+      listEl.innerHTML = cms.partners.map((p, idx) => \`
+        <div class="item-row">
+          <img class="item-thumb" src="\${p.image}" alt="\${p.name}">
+          <div>
+            <strong style="font-size:15px">\${p.name}</strong>
+            <p style="margin:4px 0;font-size:12.5px;color:var(--muted)">\${p.description || ''}</p>
+            <a href="\${p.homepage_url || '#'}" target="_blank" style="font-size:12px;color:var(--blue)">\${p.homepage_url || '링크 없음'}</a>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button type="button" class="btn light small" onclick="movePartner(\${idx}, -1)">▲</button>
+            <button type="button" class="btn light small" onclick="movePartner(\${idx}, 1)">▼</button>
+            <button type="button" class="btn light small" onclick="editPartner(\${idx})">수정</button>
+            <button type="button" class="btn danger small" onclick="deletePartner(\${idx})">삭제</button>
+          </div>
+        </div>
+      \`).join('');
+    }
+
+    window.movePartner = (idx, dir) => {
+      const target = idx + dir;
+      if (target < 0 || target >= cms.partners.length) return;
+      const temp = cms.partners[idx];
+      cms.partners[idx] = cms.partners[target];
+      cms.partners[target] = temp;
+      saveCms('파트너사 순서가 변경되었습니다.');
+      renderPartners();
+    };
+
+    window.editPartner = idx => {
+      const p = cms.partners[idx];
+      if (!p) return;
+      document.getElementById('partner-idx').value = String(idx);
+      document.getElementById('partner-name').value = p.name;
+      document.getElementById('partner-url').value = p.homepage_url || '';
+      document.getElementById('partner-img-url').value = p.image || '';
+      document.getElementById('partner-desc').value = p.description || '';
+      document.getElementById('partner-form-heading').textContent = '파트너사 정보 수정';
+      document.getElementById('partner-cancel').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.deletePartner = idx => {
+      if (!confirm('이 파트너사를 삭제하시겠습니까?')) return;
+      cms.partners.splice(idx, 1);
+      saveCms('파트너사가 삭제되었습니다.');
+      renderPartners();
+    };
+
+    document.getElementById('partner-cancel').addEventListener('click', () => {
+      document.getElementById('partner-form').reset();
+      document.getElementById('partner-idx').value = '';
+      document.getElementById('partner-form-heading').textContent = '새 파트너사 등록';
+      document.getElementById('partner-cancel').hidden = true;
+    });
+
+    document.getElementById('partner-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const idxVal = document.getElementById('partner-idx').value;
+      const file = document.getElementById('partner-file').files[0];
+      let image = document.getElementById('partner-img-url').value.trim() || 'assets/partner-1.webp';
+      if (file) image = await readFileAsDataUrl(file);
+
+      const newPartner = {
+        name: document.getElementById('partner-name').value.trim(),
+        homepage_url: document.getElementById('partner-url').value.trim(),
+        description: document.getElementById('partner-desc').value.trim(),
+        image
+      };
+
+      if (idxVal !== '') {
+        cms.partners[Number(idxVal)] = newPartner;
+      } else {
+        cms.partners.push(newPartner);
+      }
+      saveCms('파트너사 정보가 저장되었습니다!');
+      document.getElementById('partner-cancel').click();
+      renderPartners();
+    });
+
+    document.getElementById('partner-sort-select').addEventListener('change', e => {
+      cms.partnerSort = e.target.value;
+      saveCms('파트너사 정렬 기준이 저장되었습니다.');
+    });
+
+    // 3. Render Categories & Top Navigation
+    function renderCategories() {
+      const navEl = document.getElementById('nav-manager-list');
+      navEl.innerHTML = cms.navItems.map((item, idx) => \`
+        <div class="item-row" style="grid-template-columns: 1fr 1fr auto">
+          <input type="text" value="\${item.label}" onchange="updateNavItem(\${idx}, 'label', this.value)" style="padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-weight:700">
+          <input type="text" value="\${item.href}" onchange="updateNavItem(\${idx}, 'href', this.value)" style="padding:8px 12px;border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;gap:6px;align-items:center">
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px">
+              <input type="checkbox" \${item.visible !== false ? 'checked' : ''} onchange="updateNavItem(\${idx}, 'visible', this.checked)"> 노출
+            </label>
+            <button type="button" class="btn light small" onclick="moveNavItem(\${idx}, -1)">▲</button>
+            <button type="button" class="btn light small" onclick="moveNavItem(\${idx}, 1)">▼</button>
+            <button type="button" class="btn danger small" onclick="deleteNavItem(\${idx})">삭제</button>
+          </div>
+        </div>
+      \`).join('');
+
+      const catEl = document.getElementById('shop-cat-list');
+      catEl.innerHTML = cms.shopCategories.map((c, idx) => \`
+        <span style="display:inline-flex;align-items:center;gap:8px;background:var(--blue-soft);color:var(--blue);padding:8px 14px;border-radius:999px;font-weight:700">
+          \${c}
+          <button type="button" onclick="deleteShopCat(\${idx})" style="border:0;background:transparent;color:var(--danger);font-weight:900">×</button>
+        </span>
+      \`).join('');
+    }
+
+    window.updateNavItem = (idx, key, val) => {
+      cms.navItems[idx][key] = val;
+      saveCms('상단 메뉴가 수정되었습니다.');
+    };
+    window.moveNavItem = (idx, dir) => {
+      const target = idx + dir;
+      if (target < 0 || target >= cms.navItems.length) return;
+      const tmp = cms.navItems[idx];
+      cms.navItems[idx] = cms.navItems[target];
+      cms.navItems[target] = tmp;
+      saveCms('메뉴 순서가 변경되었습니다.');
+      renderCategories();
+    };
+    window.deleteNavItem = idx => {
+      cms.navItems.splice(idx, 1);
+      saveCms('메뉴가 삭제되었습니다.');
+      renderCategories();
+    };
+    document.getElementById('add-nav-form').addEventListener('submit', e => {
+      e.preventDefault();
+      cms.navItems.push({
+        label: document.getElementById('new-nav-label').value.trim(),
+        href: document.getElementById('new-nav-href').value.trim(),
+        visible: true
+      });
+      e.target.reset();
+      saveCms('새 상단 메뉴가 추가되었습니다.');
+      renderCategories();
+    });
+
+    window.deleteShopCat = idx => {
+      cms.shopCategories.splice(idx, 1);
+      saveCms('쇼핑몰 카테고리가 삭제되었습니다.');
+      renderCategories();
+      renderShop();
+    };
+    document.getElementById('add-cat-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const val = document.getElementById('new-cat-name').value.trim();
+      if (val && !cms.shopCategories.includes(val)) {
+        cms.shopCategories.push(val);
+        saveCms('쇼핑몰 카테고리가 추가되었습니다.');
+        renderCategories();
+        renderShop();
+      }
+      e.target.reset();
+    });
+
+    // 4. Render All Sections Manager
+    function renderSections() {
+      const el = document.getElementById('section-manager-list');
+      el.innerHTML = cms.sections.map((sec, idx) => \`
+        <div class="panel" style="margin:0;padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+            <strong style="font-size:15px;color:var(--blue)">\${sec.name}</strong>
+            <div style="display:flex;gap:6px;align-items:center">
+              <label style="font-weight:700;font-size:13px;display:flex;align-items:center;gap:4px">
+                <input type="checkbox" data-sec-vis="\${idx}" \${sec.visible !== false ? 'checked' : ''}> 섹션 표시(ON)
+              </label>
+              <button type="button" class="btn light small" onclick="moveSection(\${idx}, -1)">▲ 위로</button>
+              <button type="button" class="btn light small" onclick="moveSection(\${idx}, 1)">▼ 아래로</button>
+            </div>
+          </div>
+          \${sec.id !== 'hero' ? \`
+          <div class="grid-3">
+            <div class="form-group" style="margin:0">
+              <label>영문 배지(Eyebrow)</label>
+              <input type="text" data-sec-eyebrow="\${idx}" value="\${sec.eyebrow || ''}">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>섹션 큰 제목(H2)</label>
+              <input type="text" data-sec-title="\${idx}" value="\${sec.title || ''}">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>섹션 부제 설명</label>
+              <input type="text" data-sec-desc="\${idx}" value="\${sec.desc || ''}">
+            </div>
+          </div>\` : '<p style="margin:0;font-size:12px;color:var(--muted)">히어로 배너의 문구와 사진은 [모든 글씨 수정] 및 [모든 사진 수정] 탭에서 상세 변경할 수 있습니다.</p>'}
+        </div>
+      \`).join('');
+    }
+
+    window.moveSection = (idx, dir) => {
+      const target = idx + dir;
+      if (target < 0 || target >= cms.sections.length) return;
+      const tmp = cms.sections[idx];
+      cms.sections[idx] = cms.sections[target];
+      cms.sections[target] = tmp;
+      saveCms('섹션 노출 순서가 변경되었습니다.');
+      renderSections();
+    };
+
+    document.getElementById('save-sections-btn').addEventListener('click', () => {
+      cms.sections.forEach((sec, idx) => {
+        const vis = document.querySelector(\`[data-sec-vis="\${idx}"]\`);
+        if (vis) sec.visible = vis.checked;
+        const ey = document.querySelector(\`[data-sec-eyebrow="\${idx}"]\`);
+        if (ey) sec.eyebrow = ey.value;
+        const ti = document.querySelector(\`[data-sec-title="\${idx}"]\`);
+        if (ti) sec.title = ti.value;
+        const de = document.querySelector(\`[data-sec-desc="\${idx}"]\`);
+        if (de) sec.desc = de.value;
+      });
+      saveCms('모든 섹션 설정이 저장되었습니다!');
+    });
+
+    // 5. Render All Images Manager
+    function renderImages() {
+      const grid = document.getElementById('image-manager-grid');
+      grid.innerHTML = DEFAULT_CMS.imageCatalog.map((item, idx) => {
+        const currentSrc = (cms.images && cms.images[item.key]) || item.key;
+        return \`
+          <div class="img-card">
+            <div class="img-card-preview">
+              <img src="\${currentSrc}" alt="\${item.label}" id="preview-img-\${idx}">
+            </div>
+            <div class="img-card-body">
+              <strong style="font-size:13.5px">\${item.label}</strong>
+              <code style="font-size:11px;color:var(--muted)">\${item.key}</code>
+              <label class="btn small" style="cursor:pointer;text-align:center">
+                📁 새 사진 파일 업로드 교체
+                <input type="file" accept="image/*" style="display:none" onchange="replaceSiteImage('\${item.key}', this)">
+              </label>
+              \${cms.images && cms.images[item.key] ? \`<button type="button" class="btn light small" onclick="restoreSiteImage('\${item.key}')">원본 사진으로 복원</button>\` : ''}
+            </div>
+          </div>
+        \`;
+      }).join('');
+    }
+
+    window.replaceSiteImage = async (key, inputEl) => {
+      const file = inputEl.files?.[0];
+      if (!file) return;
+      const dataUrl = await readFileAsDataUrl(file);
+      cms.images = cms.images || {};
+      cms.images[key] = dataUrl;
+      saveCms('사진이 교체되었습니다! 홈페이지에 즉시 반영됩니다.');
+      renderImages();
+    };
+
+    window.restoreSiteImage = key => {
+      if (cms.images) delete cms.images[key];
+      saveCms('원본 사진으로 복원되었습니다.');
+      renderImages();
+    };
+
+    // 6. Render Texts & Company Info
+    function renderTexts() {
+      const heroWrap = document.getElementById('hero-text-fields');
+      heroWrap.innerHTML = cms.heroSlides.map((s, idx) => \`
+        <div class="panel" style="margin:0;padding:16px">
+          <strong style="color:var(--blue);display:block;margin-bottom:10px">메인 히어로 \${idx + 1}번 슬라이드</strong>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>하단 탭 버튼 이름</label>
+              <input type="text" data-hero-tab="\${idx}" value="\${s.tabLabel || ''}">
+            </div>
+            <div class="form-group">
+              <label>상단 영문 배지</label>
+              <input type="text" data-hero-badge="\${idx}" value="\${s.badge || ''}">
+            </div>
+            <div class="form-group">
+              <label>메인 큰 제목 (HTML &lt;br&gt;, &lt;em&gt; 사용 가능)</label>
+              <input type="text" data-hero-title="\${idx}" value="\${s.title.replace(/"/g, '&quot;')}">
+            </div>
+            <div class="form-group">
+              <label>설명 문구</label>
+              <input type="text" data-hero-desc="\${idx}" value="\${s.desc || ''}">
+            </div>
+          </div>
+        </div>
+      \`).join('');
+
+      document.getElementById('info-legalName').value = cms.companyInfo.legalName || '';
+      document.getElementById('info-rep').value = cms.companyInfo.representative || '';
+      document.getElementById('info-phone').value = cms.companyInfo.phone || '';
+      document.getElementById('info-email').value = cms.companyInfo.email || '';
+      document.getElementById('info-address').value = cms.companyInfo.address || '';
+    }
+
+    document.getElementById('hero-text-form').addEventListener('submit', e => {
+      e.preventDefault();
+      cms.heroSlides.forEach((s, idx) => {
+        s.tabLabel = document.querySelector(\`[data-hero-tab="\${idx}"]\`).value;
+        s.badge = document.querySelector(\`[data-hero-badge="\${idx}"]\`).value;
+        s.title = document.querySelector(\`[data-hero-title="\${idx}"]\`).value;
+        s.desc = document.querySelector(\`[data-hero-desc="\${idx}"]\`).value;
+      });
+      saveCms('메인 히어로 슬라이드 문구가 저장되었습니다!');
+    });
+
+    document.getElementById('company-info-form').addEventListener('submit', e => {
+      e.preventDefault();
+      cms.companyInfo = {
+        ...cms.companyInfo,
+        legalName: document.getElementById('info-legalName').value.trim(),
+        representative: document.getElementById('info-rep').value.trim(),
+        phone: document.getElementById('info-phone').value.trim(),
+        email: document.getElementById('info-email').value.trim(),
+        address: document.getElementById('info-address').value.trim()
+      };
+      saveCms('기업 정보 및 대표번호가 저장되었습니다!');
+    });
+
+    // 7. Render Inquiries
+    function renderInquiries() {
+      const list = cms.consultations || [];
+      const el = document.getElementById('inquiry-list');
+      if (!list.length) {
+        el.innerHTML = '<p style="color:var(--muted);text-align:center;padding:24px">접수된 온라인 문의 내역이 없습니다.</p>';
+        return;
+      }
+      el.innerHTML = list.map((item, idx) => \`
+        <div class="item-row" style="grid-template-columns:1fr auto">
+          <div>
+            <span class="badge">\${item.status || '접수대기'}</span>
+            <strong style="margin-left:8px">\${item.name}</strong>
+            <span style="margin-left:8px;font-size:12px;color:var(--muted)">\${item.service_type || ''} · \${new Date(item.created_at).toLocaleString('ko-KR')}</span>
+            <p style="margin:6px 0 0;font-size:13px;white-space:pre-wrap">\${item.message || ''}</p>
+          </div>
+          <div style="display:flex;gap:6px">
+            <select onchange="updateInquiryStatus(\${idx}, this.value)" style="padding:6px;border-radius:8px;border:1px solid var(--line)">
+              <option value="접수대기" \${item.status === '접수대기' ? 'selected' : ''}>접수대기</option>
+              <option value="상담중" \${item.status === '상담중' ? 'selected' : ''}>상담중</option>
+              <option value="처리완료" \${item.status === '처리완료' ? 'selected' : ''}>처리완료</option>
+            </select>
+            <button type="button" class="btn danger small" onclick="deleteInquiry(\${idx})">삭제</button>
+          </div>
+        </div>
+      \`).join('');
+    }
+    window.updateInquiryStatus = (idx, status) => {
+      cms.consultations[idx].status = status;
+      saveCms('상담 상태가 변경되었습니다.');
+      renderInquiries();
+    };
+    window.deleteInquiry = idx => {
+      cms.consultations.splice(idx, 1);
+      saveCms('문의 내역이 삭제되었습니다.');
+      renderInquiries();
+    };
+
+    // 8. Backup / Import / Reset
+    document.getElementById('export-cms-btn').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(cms, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'ecoplan-cms-backup.json';
+      a.click();
+    });
+
+    document.getElementById('import-cms-file').addEventListener('change', e => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          cms = JSON.parse(reader.result);
+          saveCms('백업 JSON 데이터를 성공적으로 불러왔습니다!');
+          renderAll();
+        } catch {
+          alert('올바른 JSON 파일이 아닙니다.');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById('reset-cms-btn').addEventListener('click', () => {
+      if (!confirm('모든 수정사항을 초기 상태로 되돌리시겠습니까?')) return;
+      localStorage.removeItem('ecoplan_cms_v1');
+      cms = loadCms();
+      saveCms('초기 상태로 복원되었습니다.');
+      renderAll();
+    });
+
+    function renderAll() {
+      renderShop();
+      renderPartners();
+      renderCategories();
+      renderSections();
+      renderImages();
+      renderTexts();
+      renderInquiries();
+    }
+
+    checkAuth();
+  </script>
+</body>
+</html>`;
+}

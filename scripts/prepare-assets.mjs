@@ -293,4 +293,45 @@ for (let i = 0; i < rawPartners.length; i++) {
 }
 await writeFile('src/partners.json', JSON.stringify(savedPartners, null, 2), 'utf8');
 
-console.log(`Photo assets designed and generated: 22 base visuals + ${savedPartners.length} partner images ready!`);
+// 8. Fetch Shop Products from https://www.ecoplan.co.kr/tables/shop_items?limit=100
+const shopRes = await fetch('https://www.ecoplan.co.kr/tables/shop_items?limit=100');
+const shopJson = await shopRes.json();
+const rawShop = (shopJson.data || []).sort((a, b) => {
+  const ta = new Date(a.created_at || 0).getTime();
+  const tb = new Date(b.created_at || 0).getTime();
+  return tb - ta;
+});
+
+const savedShop = [];
+for (let i = 0; i < rawShop.length; i++) {
+  const item = rawShop[i];
+  const fileName = `shop-${i + 1}.webp`;
+  const imgStr = item.image_url || '';
+  if (imgStr.startsWith('data:image/')) {
+    const base64Data = imgStr.split(',')[1];
+    const buf = Buffer.from(base64Data, 'base64');
+    await sharp(buf)
+      .resize({ width: 720, withoutEnlargement: true })
+      .webp({ quality: 88 })
+      .toFile(`assets/${fileName}`);
+  } else if (imgStr.startsWith('http')) {
+    const buf = await fetchBuffer(imgStr);
+    await sharp(buf)
+      .resize({ width: 720, withoutEnlargement: true })
+      .webp({ quality: 88 })
+      .toFile(`assets/${fileName}`);
+  }
+  savedShop.push({
+    id: item.id || `shop-${i + 1}`,
+    index: i + 1,
+    name: item.name || '',
+    category: (item.name || '').includes('야외') ? '야외·단지용 포충기' : (item.name || '').includes('화장실') ? '소형·화장실용 포충기' : '업소·매장용 포충기',
+    price: Number(item.price || 0),
+    description: item.description || '',
+    link_url: item.link_url || '',
+    image: `assets/${fileName}`
+  });
+}
+await writeFile('src/shop.json', JSON.stringify(savedShop, null, 2), 'utf8');
+
+console.log(`Photo assets designed and generated: 22 base visuals + ${savedPartners.length} partner images + ${savedShop.length} shop product images ready!`);

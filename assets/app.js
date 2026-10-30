@@ -390,12 +390,33 @@ if (consultMsgField) {
   }
 }
 
-// 7. Consultation Message Builder
+// 7. Consultation Message Builder & Admin Inquiry Log
 const consult = document.querySelector('#consult-form');
 consult?.addEventListener('submit', event => {
   event.preventDefault();
   const data = new FormData(consult);
-  const message = `[에코플랜 공간케어 상담 문의]\n시설: ${data.get('space')}\n지역: ${String(data.get('region')).trim()}\n관심 서비스: ${data.get('service')}\n내용: ${String(data.get('message')).trim() || '상담을 통해 확인하고 싶습니다.'}`;
+  const space = data.get('space');
+  const region = String(data.get('region')).trim();
+  const service = data.get('service');
+  const msgText = String(data.get('message')).trim() || '상담을 통해 확인하고 싶습니다.';
+  const message = `[에코플랜 공간케어 상담 문의]\n시설: ${space}\n지역: ${region}\n관심 서비스: ${service}\n내용: ${msgText}`;
+
+  try {
+    const raw = localStorage.getItem('ecoplan_cms_v1');
+    const cms = raw ? JSON.parse(raw) : {};
+    cms.consultations = cms.consultations || [];
+    cms.consultations.unshift({
+      id: 'inq-' + Date.now(),
+      created_at: new Date().toISOString(),
+      name: `${space} (${region})`,
+      phone: '온라인 문의',
+      service_type: service,
+      message: msgText,
+      status: '접수대기'
+    });
+    localStorage.setItem('ecoplan_cms_v1', JSON.stringify(cms));
+  } catch {}
+
   const result = document.querySelector('#consult-result');
   result.querySelector('pre').textContent = message;
   result.querySelector('[data-email]').href = `mailto:eco@ecoplan.co.kr?subject=${encodeURIComponent('에코플랜 공간케어 상담 문의')}&body=${encodeURIComponent(message)}`;
@@ -417,3 +438,237 @@ document.querySelector('#copy-inquiry')?.addEventListener('click', async () => {
     status.textContent = '자동 복사가 지원되지 않습니다. 선택된 문의 내용을 직접 복사해주세요.';
   }
 });
+
+// 8. Shop Category Filter
+function bindShopFilter() {
+  document.querySelectorAll('[data-shop-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.shopFilter;
+      document.querySelectorAll('[data-shop-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      document.querySelectorAll('[data-cms-shop] .shop-product-card').forEach(card => {
+        card.style.display = cat === '전체' || card.dataset.shopCat === cat ? '' : 'none';
+      });
+    });
+  });
+}
+bindShopFilter();
+
+// 9. EcoPlan Dynamic CMS Sync Engine & Visual Live Editor
+function escHtml(val) {
+  return String(val ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+function applyCmsOverrides() {
+  let cms;
+  try {
+    const raw = localStorage.getItem('ecoplan_cms_v1');
+    if (!raw) return;
+    cms = JSON.parse(raw);
+  } catch {
+    return;
+  }
+  if (!cms || typeof cms !== 'object') return;
+
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+  // A. Top Categories / Navigation Menu Override
+  if (Array.isArray(cms.navItems) && cms.navItems.length > 0 && nav) {
+    const visibleNav = cms.navItems.filter(item => item.visible !== false);
+    nav.innerHTML = visibleNav
+      .map(item => `<a href="${escHtml(item.href)}"${item.href === currentPage ? ' aria-current="page"' : ''}>${escHtml(item.label)}</a>`)
+      .join('');
+    nav.style.gridTemplateColumns = window.innerWidth <= 820 ? `repeat(${Math.max(1, visibleNav.length)}, 1fr)` : '';
+  }
+
+  // B. Hero Slides Text Override
+  if (Array.isArray(cms.heroSlides) && cms.heroSlides.length === 3) {
+    cms.heroSlides.forEach((custom, idx) => {
+      if (heroSlides[idx]) {
+        if (custom.badge) heroSlides[idx].badge = custom.badge;
+        if (custom.title) heroSlides[idx].title = custom.title;
+        if (custom.desc) heroSlides[idx].desc = custom.desc;
+        if (custom.tabLabel && heroTabs[idx]) heroTabs[idx].textContent = custom.tabLabel;
+      }
+    });
+    setHeroSlide(currentSlide);
+  }
+
+  // C. Global Image Replacements (Any image path mapped in cms.images)
+  if (cms.images && typeof cms.images === 'object') {
+    document.querySelectorAll('img').forEach(img => {
+      const rawAttr = img.getAttribute('src');
+      if (rawAttr && cms.images[rawAttr]) {
+        img.src = cms.images[rawAttr];
+      }
+    });
+  }
+
+  // D. Section Visibility, Order, Title & Subtitle Management
+  if (Array.isArray(cms.sections) && currentPage === 'index.html') {
+    const mainEl = document.querySelector('#main');
+    cms.sections.forEach(sec => {
+      const el = document.querySelector(`[data-section-id="${sec.id}"]`);
+      if (!el) return;
+      el.style.display = sec.visible === false ? 'none' : '';
+      if (sec.eyebrow) {
+        const ey = el.querySelector('.section-heading .eyebrow');
+        if (ey) ey.innerHTML = `<span class="dot"></span>${escHtml(sec.eyebrow)}`;
+      }
+      if (sec.title) {
+        const h2 = el.querySelector('.section-heading h2');
+        if (h2) h2.innerHTML = sec.title;
+      }
+      if (sec.desc) {
+        const p = el.querySelector('.section-heading p');
+        if (p) p.textContent = sec.desc;
+      }
+      if (mainEl) mainEl.appendChild(el);
+    });
+    const banner = mainEl?.querySelector('.contact-banner');
+    if (banner) mainEl.appendChild(banner);
+  }
+
+  // E. Partners Dynamic Render
+  if (Array.isArray(cms.partners)) {
+    document.querySelectorAll('[data-cms-partners]').forEach(container => {
+      const list = [...cms.partners];
+      if (cms.partnerSort === 'name') list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      else if (cms.partnerSort === '-created_at') list.reverse();
+
+      container.innerHTML = list
+        .map(
+          p => `<a class="partner-card" href="${escHtml(p.homepage_url || 'partners.html')}"${p.homepage_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="partner-poster"><img src="${escHtml(p.image)}" alt="${escHtml(p.name)} 파트너사 포스터" width="420" height="594" loading="lazy"></div><div class="partner-info"><h3>${escHtml(p.name)}</h3><p>${escHtml(p.description)}</p><span class="partner-link-badge">공식 사이트·안내 ↗</span></div></a>`
+        )
+        .join('');
+    });
+  }
+
+  // F. Shop Products Dynamic Render & Categories
+  if (Array.isArray(cms.shopProducts)) {
+    const list = [...cms.shopProducts];
+    if (cms.shopSort === 'price') list.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+    else if (cms.shopSort === '-price') list.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+    else if (cms.shopSort === 'created_at') list.reverse();
+
+    document.querySelectorAll('[data-cms-shop]').forEach(container => {
+      container.innerHTML = list
+        .map(
+          item => `<a class="shop-product-card" data-shop-cat="${escHtml(item.category || '업소·매장용 포충기')}" href="${escHtml(item.link_url || 'contact.html')}"${item.link_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="shop-product-thumb"><img src="${escHtml(item.image)}" alt="${escHtml(item.name)}" width="500" height="500" loading="lazy"></div><div class="shop-product-body"><span class="shop-cat-badge">${escHtml(item.category || '업소·매장용 포충기')}</span><h3>${escHtml(item.name)}</h3><div class="shop-price">${Number(item.price || 0).toLocaleString('ko-KR')}원</div><p>${escHtml(item.description)}</p><span class="shop-buy-btn">제품 상세·구매하기 ↗</span></div></a>`
+        )
+        .join('');
+    });
+
+    const filterRow = document.querySelector('#shop-cat-filters');
+    if (filterRow && Array.isArray(cms.shopCategories) && cms.shopCategories.length > 0) {
+      const cats = ['전체', ...cms.shopCategories];
+      filterRow.innerHTML = cats
+        .map((cat, idx) => `<button type="button" class="filter-btn" data-shop-filter="${escHtml(cat)}" aria-pressed="${idx === 0}">${escHtml(cat)}</button>`)
+        .join('');
+      bindShopFilter();
+    }
+  }
+
+  // G. Company Info Overrides (Phone, Representative, Address, Email)
+  if (cms.companyInfo) {
+    const info = cms.companyInfo;
+    if (info.phone) {
+      document.querySelectorAll('.header-phone, .footer-contact strong a, .contact-number').forEach(el => {
+        el.textContent = info.phone;
+        if (el.tagName === 'A') el.href = 'tel:' + info.phone.replace(/[^0-9]/g, '');
+      });
+    }
+  }
+
+  // H. Page-specific Visual Text & Image Edits (Saved via Visual Live Editor)
+  if (cms.pageEdits && cms.pageEdits[currentPage]) {
+    const pageData = cms.pageEdits[currentPage];
+    if (pageData.texts) {
+      const textNodes = document.querySelectorAll('h1, h2, h3, h4, p, span, small, li, figcaption, td, th, summary');
+      Object.entries(pageData.texts).forEach(([idx, htmlVal]) => {
+        if (textNodes[idx]) textNodes[idx].innerHTML = htmlVal;
+      });
+    }
+    if (pageData.imgs) {
+      const imgNodes = document.querySelectorAll('main img, header img, footer img');
+      Object.entries(pageData.imgs).forEach(([idx, srcVal]) => {
+        if (imgNodes[idx]) imgNodes[idx].src = srcVal;
+      });
+    }
+  }
+}
+
+applyCmsOverrides();
+
+// 10. Visual Live Editor Mode (?edit=1) — Click any text or photo on the page to edit directly
+if (new URLSearchParams(window.location.search).get('edit') === '1') {
+  document.body.classList.add('cms-visual-edit');
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+  const bar = document.createElement('div');
+  bar.className = 'cms-edit-bar';
+  bar.innerHTML = `
+    <span>✏️ 실시간 비주얼 편집 모드 (글씨 클릭=수정 / 사진 클릭=교체)</span>
+    <button type="button" id="cms-save-visual" style="background:#00b89c;color:#fff;cursor:pointer">현재 페이지 저장</button>
+    <a href="manager.html" style="background:#fff;color:#0b1b32">관리자 홈으로</a>
+    <a href="${currentPage}" style="background:rgba(255,255,255,0.18);color:#fff">편집 종료</a>
+  `;
+  document.body.appendChild(bar);
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.style.display = 'none';
+  document.body.appendChild(fileInput);
+
+  const textNodes = document.querySelectorAll('main h1, main h2, main h3, main h4, main p, main span:not(.dot), main small, main li, main figcaption, main td, main th, main summary');
+  textNodes.forEach(node => {
+    node.setAttribute('contenteditable', 'true');
+    node.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      node.focus();
+    });
+  });
+
+  let activeImg = null;
+  const imgNodes = document.querySelectorAll('main img, header img, footer img');
+  imgNodes.forEach(img => {
+    img.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      activeImg = img;
+      fileInput.click();
+    });
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (!file || !activeImg) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      activeImg.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.querySelector('#cms-save-visual')?.addEventListener('click', () => {
+    const raw = localStorage.getItem('ecoplan_cms_v1');
+    const cms = raw ? JSON.parse(raw) : {};
+    cms.pageEdits = cms.pageEdits || {};
+    cms.pageEdits[currentPage] = { texts: {}, imgs: {} };
+
+    const allTexts = document.querySelectorAll('h1, h2, h3, h4, p, span, small, li, figcaption, td, th, summary');
+    allTexts.forEach((node, idx) => {
+      if (node.closest('.cms-edit-bar')) return;
+      cms.pageEdits[currentPage].texts[idx] = node.innerHTML;
+    });
+
+    const allImgs = document.querySelectorAll('main img, header img, footer img');
+    allImgs.forEach((img, idx) => {
+      cms.pageEdits[currentPage].imgs[idx] = img.getAttribute('src');
+    });
+
+    localStorage.setItem('ecoplan_cms_v1', JSON.stringify(cms));
+    alert('현재 페이지의 모든 글씨와 사진 수정사항이 저장되었습니다!');
+  });
+}

@@ -1,7 +1,9 @@
 import { mkdir, writeFile, copyFile, readFile } from 'node:fs/promises';
 import { company as c, pests, faqs, industries } from '../src/content.mjs';
+import { buildAdminHtml } from '../src/admin-template.mjs';
 
 const partners = JSON.parse(await readFile('src/partners.json', 'utf8'));
+const shopProducts = JSON.parse(await readFile('src/shop.json', 'utf8'));
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const icons = {
@@ -50,7 +52,9 @@ const serviceCards = () => `<div class="service-grid">${pests.map((p, i) => `<a 
 
 const industryCards = () => `<div class="industry-grid">${industries.map(i => `<a href="industries.html#${i[0]}" class="industry-card"><div class="industry-card-media"><img src="${placePhotos[i[0]]}" alt="${i[1]} 위생관리 공간 이미지" width="880" height="580" loading="lazy"></div><div class="industry-card-body"><h3>${i[1]}</h3><p>${i[3]}</p><small><span>${i[4]}</span><span aria-hidden="true">↗</span></small></div></a>`).join('')}</div>`;
 
-const partnerCards = (full = false) => `<div class="${full ? 'partner-grid-full' : 'partner-strip'}">${partners.map(p => `<a class="partner-card" href="${esc(p.homepage_url || 'partners.html')}"${p.homepage_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="partner-poster"><img src="${p.image}" alt="${esc(p.name)} 파트너사 포스터" width="420" height="594" loading="lazy"></div><div class="partner-info"><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p><span class="partner-link-badge">공식 사이트·안내 ↗</span></div></a>`).join('')}</div>`;
+const partnerCards = (full = false) => `<div class="${full ? 'partner-grid-full' : 'partner-strip'}" data-cms-partners="${full ? 'full' : 'strip'}">${partners.map(p => `<a class="partner-card" href="${esc(p.homepage_url || 'partners.html')}"${p.homepage_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="partner-poster"><img src="${p.image}" alt="${esc(p.name)} 파트너사 포스터" width="420" height="594" loading="lazy"></div><div class="partner-info"><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p><span class="partner-link-badge">공식 사이트·안내 ↗</span></div></a>`).join('')}</div>`;
+
+const shopCards = () => `<div class="shop-product-grid" data-cms-shop>${shopProducts.map(item => `<a class="shop-product-card" data-shop-cat="${esc(item.category || '업소·매장용 포충기')}" href="${esc(item.link_url || 'contact.html')}"${item.link_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="shop-product-thumb"><img src="${item.image}" alt="${esc(item.name)}" width="500" height="500" loading="lazy"></div><div class="shop-product-body"><span class="shop-cat-badge">${esc(item.category || '업소·매장용 포충기')}</span><h3>${esc(item.name)}</h3><div class="shop-price">${Number(item.price || 0).toLocaleString('ko-KR')}원</div><p>${esc(item.description)}</p><span class="shop-buy-btn">제품 상세·구매하기 ↗</span></div></a>`).join('')}</div>`;
 
 const stepsHtml = () => `<div class="steps">${[['사전조사 (3W 진단)', '발생 이유(Why)·침입 경로(Where)·활동 시간(When) 3W 정밀 분석', 'search'], ['계획수립 (IPM 설계)', '해충의 생활사·행동 패턴과 시설 기준에 맞춘 방제 전략·주기 수립', 'clipboard'], ['맞춤 방제 & 약제 로테이션', '계열별 허가 약제·장비 적용과 환경개선 제안을 동시에 실행', 'shield'], ['평가 · 사후 모니터링', '포획·발생 기록으로 현 수준을 평가하고 재발 방지 기준 고도화', 'chart']].map((s, i) => `<div class="step"><span class="step-num">0${i + 1}</span><div><h3>${s[0]}</h3><p>${s[1]}</p></div>${icon(s[2])}</div>`).join('')}</div>`;
 
@@ -172,7 +176,7 @@ function shell(page) {
 <div class="utility"><div class="container"><div class="utility-badges"><span class="utility-pill">ECOPLAN SCIENCE</span><span>3W 원인진단 · IPM 통합해충관리 · HACCP/GMP 위생솔루션</span></div><div class="utility-links">${link('diagnosis.html', '해충 자가진단')}${link('process.html', '3W·IPM 과학공법')}${link('products-safety.html', '약제·안전기준')}${link('faq.html', 'FAQ ↗')}</div></div></div>
 <header class="header"><div class="container header-inner"><div class="header-top"><a href="index.html" class="brand" aria-label="에코플랜 홈"><img src="assets/logo.webp" alt="에코플랜 EcoPlan" width="144" height="52"><span class="brand-sub">SCIENCE CARE</span></a><div class="header-action"><a class="header-phone" href="tel:16884587">${icon('phone')}1688-4587</a>${link('contact.html', '무료상담 ↗', 'btn small')}</div></div><nav class="nav" id="primary-nav" aria-label="주 메뉴">${[['company.html', '회사소개'], ['services.html', '서비스소개'], ['partners.html', '파트너사'], ['management.html', '관리현황'], ['shop.html', '쇼핑몰'], ['contact.html', '상담신청'], ['faq.html', 'FAQ']].map(([href, label]) => `<a href="${href}"${page.file === href ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
 <main id="main">${page.body}</main>
-<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-logo"><img src="assets/logo.webp" alt="에코플랜" width="136" height="50" loading="lazy"><p>보이지 않는 원인까지 과학으로 설계하는 공간케어, 에코플랜.</p></div><nav class="footer-links" aria-label="하단 메뉴">${link('company.html', '회사소개')}${link('services.html', '서비스소개')}${link('partners.html', '파트너사')}${link('process.html', '3W·IPM 공법')}${link('products-safety.html', '사용약제 안내')}${link('industries.html', '장소별 솔루션')}${link('faq.html', '자주 묻는 질문')}${link('privacy.html', '개인정보 안내')}${link('contact.html', '고객센터')}</nav></div><div class="footer-info"><div><p><strong>${c.legalName}</strong> &nbsp;|&nbsp; 대표 ${c.representative} &nbsp;|&nbsp; 사업자등록번호 ${c.businessId}</p><p>${c.address}</p><p>이메일 ${link('mailto:' + c.email, c.email)}</p></div><div class="footer-contact">에코플랜 고객상담센터<strong>${link('tel:16884587', c.phone)}</strong><span>가정집 · 사업장 · HACCP 시설 맞춤 상담</span></div></div><div class="copyright">© 2026 ECOPLAN. All rights reserved.</div></div></footer>
+<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-logo"><a href="manager.html" title="관리자 페이지로 이동"><img src="assets/logo.webp" alt="에코플랜" width="136" height="50" loading="lazy"></a><p>보이지 않는 원인까지 과학으로 설계하는 공간케어, 에코플랜.</p></div><nav class="footer-links" aria-label="하단 메뉴">${link('company.html', '회사소개')}${link('services.html', '서비스소개')}${link('partners.html', '파트너사')}${link('process.html', '3W·IPM 공법')}${link('products-safety.html', '사용약제 안내')}${link('industries.html', '장소별 솔루션')}${link('faq.html', '자주 묻는 질문')}${link('privacy.html', '개인정보 안내')}${link('contact.html', '고객센터')}${link('manager.html', '관리자 시스템')}</nav></div><div class="footer-info"><div><p><strong>${c.legalName}</strong> &nbsp;|&nbsp; 대표 ${c.representative} &nbsp;|&nbsp; 사업자등록번호 ${c.businessId}</p><p>${c.address}</p><p>이메일 ${link('mailto:' + c.email, c.email)}</p></div><div class="footer-contact">에코플랜 고객상담센터<strong>${link('tel:16884587', c.phone)}</strong><span>가정집 · 사업장 · HACCP 시설 맞춤 상담</span></div></div><div class="copyright">© 2026 ECOPLAN. All rights reserved.</div></div></footer>
 <a class="floating-contact" href="contact.html">${icon('chat')}무료 진단·상담</a>
 <nav class="mobile-dock" aria-label="모바일 빠른 메뉴">
   <a href="index.html">${icon('home')}<span>홈</span></a>
@@ -194,7 +198,7 @@ add({
   description: '에코플랜의 3W 원인진단과 IPM 통합해충관리. 바퀴벌레·쥐·파리·모기 방제부터 HACCP/GMP 사업장 관리, 이물분석과 포충기 솔루션까지 확인하세요.',
   faqs: faqs.slice(0, 5),
   body: `
-<section class="hero-showcase">
+<section class="hero-showcase" data-section-id="hero">
   <div class="container">
     <div class="hero-frame">
       <div class="hero-main-card">
@@ -282,14 +286,14 @@ add({
   </div>
 </section>
 
-<section class="section soft" id="curator">
+<section class="section soft" id="curator" data-section-id="curator">
   <div class="container">
     ${sectionHeading('CUSTOM SOLUTION CURATOR', '어떤 문제를 해결하고 싶나요?', '해충 퇴치부터 바이러스 살균, HACCP 위생관리, 이물분석까지 최적의 솔루션을 제안합니다.', 'services.html', '전체 서비스 안내')}
     ${curatorSection()}
   </div>
 </section>
 
-<section class="section" id="services">
+<section class="section" id="services" data-section-id="services">
   <div class="container">
     ${sectionHeading('PEST CONTROL LINEUP', '해충별 정밀 방제 솔루션', '해충의 생활사와 서식처 특성에 맞춘 에코플랜의 4대 핵심 방제 솔루션', 'services.html', '전체 솔루션 보기')}
     ${serviceCards()}
@@ -300,7 +304,7 @@ add({
   </div>
 </section>
 
-<section class="section dark" id="places">
+<section class="section dark" id="places" data-section-id="places">
   <div class="container">
     ${sectionHeading('SOLUTIONS BY PLACE', '어느 곳에 에코플랜이 필요한가요?', '화장실·탕비실·주방·하역장 등 120개 세부 장소 유형과 업종별 기준에 맞춘 맞춤 솔루션을 제공합니다.', 'industries.html', '업종별 상세 보기')}
     ${industryCards()}
@@ -315,15 +319,15 @@ add({
   </div>
 </section>
 
-<section class="section soft" id="company">
+<section class="section soft" id="company" data-section-id="company">
   <div class="container">
     <div class="mid-photo-row">
       <figure class="company-image">
-        <img src="assets/company.webp" width="1200" height="900" loading="lazy" alt="에코플랜 연구소 및 방제 전문가 서비스 이미지">
+        <img src="assets/company.webp" width="1200" height="900" loading="lazy" alt="에코플랜 연구소 및 방제 전문가 서비스 이미지" data-cms-img="company_main">
         <figcaption>에코플랜 연구소 & 현장 방제 전문가 그룹 (Since 2008)</figcaption>
       </figure>
       <figure class="company-image">
-        <img src="assets/technology.webp" width="1100" height="820" loading="lazy" alt="에코플랜 정밀 해충 탐지 및 방제 기술 이미지">
+        <img src="assets/technology.webp" width="1100" height="820" loading="lazy" alt="에코플랜 정밀 해충 탐지 및 방제 기술 이미지" data-cms-img="tech_main">
         <figcaption>보이지 않는 곳까지 완벽하게 책임지는 에코플랜 정밀 방제</figcaption>
       </figure>
     </div>
@@ -363,14 +367,21 @@ add({
   </div>
 </section>
 
-<section class="section" id="partners">
+<section class="section" id="partners" data-section-id="partners">
   <div class="container">
     ${sectionHeading('FRANCHISE & PARTNERS', '함께하는 파트너사', '좌우로 스와이프하여 에코플랜과 함께 쾌적하고 안전한 위생 환경을 만들어가는 프랜차이즈·파트너사를 확인해보세요.', 'partners.html', '파트너사 전체보기')}
     ${partnerCards(false)}
   </div>
 </section>
 
-<section class="section soft">
+<section class="section soft" id="shop-section" data-section-id="shop">
+  <div class="container">
+    ${sectionHeading('ECOPLAN SHOPPING MALL', '에코플랜 포충기 쇼핑몰', '공간 특성에 맞춘 고효율 UV LED·BL램프 유인 포충기 라인업을 확인하고 바로 구매하실 수 있습니다.', 'shop.html', '쇼핑몰 전체보기')}
+    ${shopCards()}
+  </div>
+</section>
+
+<section class="section" id="faq-section" data-section-id="faq">
   <div class="container faq-layout">
     <div class="faq-bubble-card">
       <span class="eyebrow"><span class="dot"></span>ECOPLAN FAQ</span>
@@ -408,7 +419,7 @@ add({ file: 'partners.html', label: '파트너사', title: '함께하는 파트�
 
 add({ file: 'management.html', label: '관리현황', title: '방제 관리현황·모니터링 기록 안내 | 에코플랜', description: '해충 발생 위치, 포획 추이, 시설 개선과 다음 점검 계획까지. 에코플랜의 관리현황 확인 항목과 고객별 관리 기록 문의 방법을 안내합니다.', body: `${pageHero('관리현황', '기록을 통해, 공간의 변화를 확인합니다.', '해충 관리는 작업 당일의 처리에서 끝나지 않습니다. 발생 위치와 빈도, 장비 상태, 시설 개선 여부를 기록하고 다음 관리 계획에 반영합니다.', 'MANAGEMENT & MONITORING')}<section class="section"><div class="container">${sectionHeading('MANAGEMENT RECORDS','우리 공간에서 확인할 6대 관리 항목','아래는 관리 항목 안내이며, 개별 고객의 실제 실적이나 실시간 데이터가 아닙니다.')}<div class="management-list">${[['01','현장과 대상 해충','시설별 구역을 나누고 관찰한 해충과 흔적, 최초 발견 시점을 기록합니다.'],['02','점검·포획 기록','장비 위치, 점검 일자, 포획 또는 활동 흔적을 연결해 발생 추이를 확인합니다.'],['03','작업 내역','적용 범위와 처리 방법, 사용 제품·장비와 작업 전후 안내를 확인합니다.'],['04','환경개선 제안','틈새, 누수, 적치물, 폐기물 관리 등 고객과 함께 개선할 과제를 정리합니다.'],['05','사후 확인','재발 위치와 상황을 기존 기록과 비교하고 관리 방향을 조정합니다.'],['06','다음 점검 계획','현장 상태와 계약 범위에 따라 다음 방문 및 확인 항목을 협의합니다.']].map(([n,h,p])=>`<div class="management-card"><strong>RECORD ${n}</strong><h3>${h}</h3><p>${p}</p><div class="status-line"><span class="dot"></span>현장별 맞춤 관리 기록</div></div>`).join('')}</div><div class="diagnosis-banner"><div><h3>이미 에코플랜의 관리를 받고 계신가요?</h3><p>현장명과 계약 담당 정보를 준비해 고객센터로 문의하시면 공개 가능한 관리 기록과 확인 절차를 안내합니다.</p></div>${btn('contact.html','관리 기록 문의','light')}</div></div></section>${cta()}` });
 
-add({ file: 'shop.html', label: '쇼핑몰', title: '포충기 선택·설치 상담 | 에코플랜 쇼핑몰', description: '공간에 맞는 포충기 선택과 설치 위치, 유지관리 방법을 상담하세요. SMART CATCH ALPHA 참고 이미지와 구매 전 확인할 항목을 안내합니다.', body: `${pageHero('쇼핑몰','포충기 선택도, 공간 과학에 맞게.','날아다니는 비래해충의 포획과 모니터링을 돕는 포충기. 설치 환경, 관리 목적과 유지관리 조건을 확인한 뒤 제품을 선택하세요.','ECOPLAN SHOP')}<section class="section"><div class="container shop-grid"><figure class="shop-image"><img src="assets/trap.webp" alt="제공 자료의 SMART CATCH ALPHA 포충기 제품 이미지" width="1000" height="877" loading="lazy"><figcaption class="source-line">제공 자료의 SMART CATCH ALPHA 참고 이미지 · 세부 사양 및 판매 여부는 상담 시 확인</figcaption></figure><div><span class="eyebrow"><span class="dot"></span>INSECT LIGHT TRAP</span><h2>공간에 맞는 포충기<br>선택·설치 상담</h2><p>매장, 주방 주변, 창고 등 설치 장소와 식품 노출 여부를 확인합니다. 포충기를 설치하더라도 발생원 관리와 유입 차단을 병행하는 것이 중요합니다.</p><div class="credential-list"><span>${icon('check')}설치 위치 정밀 선정</span><span>${icon('check')}유지관리 조건 확인</span><span>${icon('check')}공간별 사양 상담</span><span>${icon('check')}소모품 교체 안내</span></div><p class="note">제품 모델·가격·재고·배송·설치비·보증 조건은 상담 시 확인합니다. 이 페이지에서는 온라인 결제가 진행되지 않습니다.</p>${btn('contact.html','제품 구매·설치 상담')}</div></div></section><section class="section soft"><div class="container">${sectionHeading('BEFORE YOU CHOOSE','구매 전 꼭 확인할 세 가지')}<div class="info-cards">${[['설치 환경','공간 크기, 벽면·전원, 출입구와 주변 조명, 식품과 이용자 동선을 확인합니다.'],['관리 방식','포획 방식과 점검 편의성, 소모품 교체 주기 및 비용을 함께 확인합니다.'],['제품 조건','실제 모델의 적용 범위, 인증·표시사항, 설치 조건, 교환·반품 및 보증 기준을 확인합니다.']].map(([h,p])=>`<div class="info-card">${icon('shop')}<h3>${h}</h3><p>${p}</p></div>`).join('')}</div></div></section>${cta()}` });
+add({ file: 'shop.html', label: '쇼핑몰', title: '포충기 쇼핑몰·설치 상담 | 스마트캐치 공식 라인업 | 에코플랜', description: '스마트캐치 루미오키퍼, 루미오, 알파, 포커스 등 업소용·야외용·화장실용 포충기 라인업을 확인하고 바로 구매하거나 맞춤 설치를 상담하세요.', body: `${pageHero('쇼핑몰','포충기 선택도, 공간 과학에 맞게.','날아다니는 비래해충의 포획과 모니터링을 돕는 포충기. 공간별 추천 라인업을 확인하고 네이버 스마트스토어 구매 또는 전문가 설치 상담을 이용하세요.','ECOPLAN SHOP')}<section class="section"><div class="container">${sectionHeading('OFFICIAL PRODUCT LINEUP','에코플랜 공식 포충기 쇼핑몰','카테고리를 선택하거나 제품을 클릭하면 상세 구매 페이지로 이동합니다.')}<div class="filter-row" id="shop-cat-filters" aria-label="상품 카테고리 분류">${['전체','업소·매장용 포충기','야외·단지용 포충기','소형·화장실용 포충기'].map((cat,idx)=>`<button type="button" class="filter-btn" data-shop-filter="${cat}" aria-pressed="${idx===0}">${cat}</button>`).join('')}</div>${shopCards()}</div></section><section class="section soft"><div class="container shop-grid"><figure class="shop-image"><img src="assets/trap.webp" alt="SMART CATCH ALPHA 포충기 제품 이미지" width="1000" height="877" loading="lazy"><figcaption class="source-line">SMART CATCH ALPHA · 설치 환경별 사양 및 유지관리 상담 가능</figcaption></figure><div><span class="eyebrow"><span class="dot"></span>INSECT LIGHT TRAP CONSULTING</span><h2>공간에 맞는 포충기<br>선택·설치 상담</h2><p>매장, 주방 주변, 창고 등 설치 장소와 식품 노출 여부를 확인합니다. 포충기를 설치하더라도 발생원 관리와 유입 차단을 병행하는 것이 중요합니다.</p><div class="credential-list"><span>${icon('check')}설치 위치 정밀 선정</span><span>${icon('check')}유지관리 조건 확인</span><span>${icon('check')}공간별 사양 상담</span><span>${icon('check')}소모품 교체 안내</span></div><div class="actions">${btn('contact.html','설치·대량구매 상담')}${btn('manager.html','관리자 상품 등록 ↗','light')}</div></div></div></section><section class="section"><div class="container">${sectionHeading('BEFORE YOU CHOOSE','구매 전 꼭 확인할 세 가지')}<div class="info-cards">${[['설치 환경','공간 크기, 벽면·전원, 출입구와 주변 조명, 식품과 이용자 동선을 확인합니다.'],['관리 방식','포획 방식과 점검 편의성, 소모품 교체 주기 및 비용을 함께 확인합니다.'],['제품 조건','실제 모델의 적용 범위, 인증·표시사항, 설치 조건, 교환·반품 및 보증 기준을 확인합니다.']].map(([h,p])=>`<div class="info-card">${icon('shop')}<h3>${h}</h3><p>${p}</p></div>`).join('')}</div></div></section>${cta()}` });
 
 const allFaqs = [...faqs, ...pests.flatMap(p => p.faqs.map(([q,a])=>({category:'해충별',q,a})))];
 add({ file: 'faq.html', label: '자주 묻는 질문', title: '해충방제 FAQ | 비용·약제·HACCP·사후관리 | 에코플랜', description: '방제 비용, 아이·반려동물, 재입실, IPM, HACCP·GMP 시설 관리와 해충별 관리 방법까지. 에코플랜 상담 전 궁금한 질문 22가지를 확인하세요.', faqs: allFaqs, body: `${pageHero('자주 묻는 질문','궁금한 질문에, 명확한 답변을.','방제 비용과 과정, 약제 사용, 업종별 관리, 해충별 대응 방법을 확인하세요. 현장별 조건은 상담을 통해 구체적으로 안내합니다.','QUESTIONS & ANSWERS')}<section class="section"><div class="container faq-page"><label class="visually-hidden" for="faq-search">질문과 답변 검색</label><input type="search" id="faq-search" class="search-field" placeholder="궁금한 내용을 검색해보세요. 예: 비용, 반려동물, 바퀴벌레, HACCP"><div class="filter-row" aria-label="질문 분류">${['전체','서비스','비용·상담','약제·안전','사업장','사후관리','해충별'].map((x,i)=>`<button class="filter-btn" type="button" data-filter="${x}" aria-pressed="${i===0}">${x}</button>`).join('')}</div><p class="result-count" id="faq-count" aria-live="polite">${allFaqs.length}개의 질문을 확인할 수 있습니다.</p>${faqHtml(allFaqs,true)}<p id="faq-empty" class="empty" hidden>일치하는 질문이 없습니다. 다른 검색어를 입력하거나 전체 분류를 선택해주세요.</p>${sources}</div></section>${cta()}` });
@@ -447,4 +458,7 @@ await writeFile('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset 
 await writeFile('robots.txt', `User-agent: *\nAllow: /\nDisallow: /src/\nDisallow: /scripts/\nDisallow: /docs/\nDisallow: /node_modules/\nDisallow: /test-results/\n\nSitemap: ${c.url}/sitemap.xml\n`);
 await writeFile('llms.txt', `# 에코플랜 (EcoPlan)\n\n> ${c.legalName}의 해충방제·방역소독 공간케어 서비스 안내.\n\n## 기업 정보\n- 대표: ${c.representative}\n- 상담: ${c.phone}\n- 이메일: ${c.email}\n- 주소: ${c.address}\n- 서비스 지역과 일정, 가격은 상담 시 확인합니다.\n\n## 주요 페이지\n${indexed.map(p=>`- [${p.label}](${c.url}${p.file==='index.html'?'/':'/'+p.file}): ${p.description}`).join('\n')}\n\n## 정보 해석\n- 사이트의 본문과 각 페이지의 설명을 기준으로 확인합니다.\n- HACCP·GMP 시설 관리 상담은 인증 취득 보장을 의미하지 않습니다.\n- 자가점검은 관찰 정보 기반 안내이며 현장 진단을 대신하지 않습니다.\n- 관리현황 페이지는 관리 항목 설명이며 실제 고객 실적 데이터가 아닙니다.\n- 제품 가격·재고·보증 조건은 상담 확인 사항입니다.\n\n이 파일은 보조적인 사이트 안내이며 검색엔진 또는 AI의 사용과 노출을 보장하지 않습니다.\n`);
 await writeFile('404.html', shell({ file:'404.html', label:'페이지를 찾을 수 없습니다', title:'페이지를 찾을 수 없습니다 | 에코플랜', description:'요청한 페이지가 없습니다. 에코플랜 홈 또는 서비스 안내를 확인해주세요.', noindex:true, body:`${pageHero('페이지 없음','페이지를 찾을 수 없습니다.','주소를 확인하거나 아래에서 필요한 서비스를 찾아주세요.','404 · PAGE NOT FOUND')}<section class="section"><div class="container actions">${btn('index.html','홈으로 이동')}${btn('services.html','서비스 둘러보기','light')}</div></section>` }));
-console.log(`Built ${pages.length} content pages + 404; ${indexed.length} sitemap URLs; static JSON-LD, robots.txt and llms.txt ready.`);
+const adminHtml = buildAdminHtml({ partners, shopProducts, company: c });
+await writeFile('manager.html', adminHtml);
+await writeFile('admin.html', adminHtml);
+console.log(`Built ${pages.length} content pages + 404 + manager.html/admin.html; ${indexed.length} sitemap URLs; static JSON-LD, robots.txt and llms.txt ready.`);

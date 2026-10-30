@@ -49,7 +49,10 @@ const files = [
   'assets/og.png',
   'assets/og-kakao.jpg',
   'assets/favicon.svg',
-  ...Array.from({ length: 15 }, (_, i) => `assets/partner-${i + 1}.webp`)
+  'manager.html',
+  'admin.html',
+  ...Array.from({ length: 15 }, (_, i) => `assets/partner-${i + 1}.webp`),
+  ...Array.from({ length: 4 }, (_, i) => `assets/shop-${i + 1}.webp`)
 ];
 
 for (const file of files) {
@@ -58,7 +61,7 @@ for (const file of files) {
 
 let jsonLdCount = 0;
 let internalLinksChecked = 0;
-const htmlFiles = files.filter(f => f.endsWith('.html'));
+const htmlFiles = files.filter(f => f.endsWith('.html') && f !== 'manager.html' && f !== 'admin.html');
 
 for (const file of htmlFiles) {
   const html = await readFile(file, 'utf8');
