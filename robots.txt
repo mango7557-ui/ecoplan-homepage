@@ -8,6 +8,8 @@ Disallow: /node_modules/
 Disallow: /test-results/
 Disallow: /manager.html
 Disallow: /admin.html
+Disallow: /ecoplan-homepage/manager.html
+Disallow: /ecoplan-homepage/admin.html
 
 # Search & AI Search Indexing / User-Triggered Citation Bots
 User-agent: Googlebot
@@ -27,5 +29,7 @@ Disallow: /node_modules/
 Disallow: /test-results/
 Disallow: /manager.html
 Disallow: /admin.html
+Disallow: /ecoplan-homepage/manager.html
+Disallow: /ecoplan-homepage/admin.html
 
-Sitemap: https://www.ecoplan.co.kr/sitemap.xml
+Sitemap: https://mango7557-ui.github.io/ecoplan-homepage/sitemap.xml

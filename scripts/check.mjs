@@ -79,8 +79,10 @@ for (const file of htmlFiles) {
     throw new Error(`Found dynamic loading placeholder in ${file}`);
   }
 
-  if (html.includes('mango7557-ui.github.io') || html.includes('http://localhost')) {
-    throw new Error(`Found preview or localhost URL in production HTML ${file}`);
+  const expectedSiteUrl = (process.env.SITE_URL || 'https://mango7557-ui.github.io/ecoplan-homepage').replace(/\/$/, '');
+  const expectedCanonical = expectedSiteUrl + (file === 'index.html' ? '/' : '/' + file);
+  if (!html.includes(`<link rel="canonical" href="${expectedCanonical}">`) || html.includes('http://localhost')) {
+    throw new Error(`Canonical mismatch or localhost URL in ${file}`);
   }
 
   const ldMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -142,8 +144,9 @@ if (sitemapUrls.length !== 16) {
   throw new Error(`Expected 16 indexed URLs in sitemap.xml, got ${sitemapUrls.length}`);
 }
 
+const expectedSiteUrl = (process.env.SITE_URL || 'https://mango7557-ui.github.io/ecoplan-homepage').replace(/\/$/, '');
 const robots = await readFile('robots.txt', 'utf8');
-if (!robots.includes(`Sitemap: ${company.url}/sitemap.xml`)) {
+if (!robots.includes(`Sitemap: ${expectedSiteUrl}/sitemap.xml`)) {
   throw new Error('robots.txt missing Sitemap directive');
 }
 
