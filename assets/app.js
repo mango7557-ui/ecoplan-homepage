@@ -381,25 +381,61 @@ document.querySelector('#copy-diagnosis')?.addEventListener('click', async () =>
 });
 
 // Pre-fill consultation form if redirected from self-diagnosis
+const consultSpaceField = document.querySelector('#consult-space');
 const consultMsgField = document.querySelector('#consult-message');
-if (consultMsgField) {
+if (consultMsgField || consultSpaceField) {
   const params = new URLSearchParams(window.location.search);
+  const spaceParam = params.get('space');
   const summary = params.get('summary');
-  if (summary && !consultMsgField.value) {
+  if (spaceParam && consultSpaceField) {
+    const spaceMap = {
+      '가정·공동주택': '가정·공동주택',
+      '외식업장·카페·프랜차이즈': '음식점·카페',
+      '식품제조·HACCP·공장': '식품·제조시설',
+      '오피스 빌딩·공공기관': '빌딩·공공기관',
+      '병원·호텔·숙박시설': '병원·호텔',
+      '물류·창고·상업유통시설': '상업·유통시설'
+    };
+    const mapped = spaceMap[spaceParam] || spaceParam;
+    if ([...consultSpaceField.options].some(opt => opt.value === mapped || opt.text === mapped)) {
+      consultSpaceField.value = mapped;
+    }
+  }
+  if (summary && consultMsgField && !consultMsgField.value) {
     consultMsgField.value = `${summary}\n현장 방문 가능 일정과 맞춤 방제 견적 상담을 요청합니다.`;
   }
 }
 
 // 7. Consultation Message Builder & Admin Inquiry Log
 const consult = document.querySelector('#consult-form');
+function buildConsultMessage() {
+  if (!consult) return '';
+  const data = new FormData(consult);
+  const space = data.get('space') || '가정·공동주택';
+  const region = String(data.get('region') || '').trim() || '지역 미입력';
+  const service = data.get('service') || '해충방제';
+  const msgText = String(data.get('message') || '').trim() || '상담을 통해 확인하고 싶습니다.';
+  const message = `[에코플랜 공간케어 상담 문의]\n시설: ${space}\n지역: ${region}\n관심 서비스: ${service}\n내용: ${msgText}`;
+
+  const output = document.querySelector('#consult-output') || document.querySelector('#consult-result');
+  if (output) {
+    output.innerHTML = `<strong>작성된 상담 문의 문안</strong><pre style="white-space:pre-wrap;margin:10px 0;padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;font-family:inherit">${escHtml(message)}</pre><p id="copy-status" style="margin:0;font-weight:700;color:var(--blue)">위 문안을 복사해 카카오톡 상담창에 붙여넣거나 이메일 앱 열기를 눌러 전송해 주세요.</p>`;
+    output.dataset.message = message;
+    output.hidden = false;
+  }
+
+  const mailLink = document.querySelector('#mail-consult') || output?.querySelector('[data-email]');
+  if (mailLink) {
+    mailLink.href = `mailto:eco@ecoplan.co.kr?subject=${encodeURIComponent('에코플랜 공간케어 상담 문의')}&body=${encodeURIComponent(message)}`;
+  }
+
+  return { space, region, service, msgText, message, output };
+}
+
 consult?.addEventListener('submit', event => {
   event.preventDefault();
-  const data = new FormData(consult);
-  const space = data.get('space');
-  const region = String(data.get('region')).trim();
-  const service = data.get('service');
-  const msgText = String(data.get('message')).trim() || '상담을 통해 확인하고 싶습니다.';
-  const message = `[에코플랜 공간케어 상담 문의]\n시설: ${space}\n지역: ${region}\n관심 서비스: ${service}\n내용: ${msgText}`;
+  const built = buildConsultMessage();
+  if (!built) return;
 
   try {
     const raw = localStorage.getItem('ecoplan_cms_v1');
@@ -408,34 +444,41 @@ consult?.addEventListener('submit', event => {
     cms.consultations.unshift({
       id: 'inq-' + Date.now(),
       created_at: new Date().toISOString(),
-      name: `${space} (${region})`,
+      name: `${built.space} (${built.region})`,
       phone: '온라인 문의',
-      service_type: service,
-      message: msgText,
+      service_type: built.service,
+      message: built.msgText,
       status: '접수대기'
     });
     localStorage.setItem('ecoplan_cms_v1', JSON.stringify(cms));
   } catch {}
 
-  const result = document.querySelector('#consult-result');
-  result.querySelector('pre').textContent = message;
-  result.querySelector('[data-email]').href = `mailto:eco@ecoplan.co.kr?subject=${encodeURIComponent('에코플랜 공간케어 상담 문의')}&body=${encodeURIComponent(message)}`;
-  result.hidden = false;
-  result.focus();
+  built.output?.focus();
 });
-document.querySelector('#copy-inquiry')?.addEventListener('click', async () => {
-  const preview = document.querySelector('#consult-result pre');
+
+const copyBtn = document.querySelector('#copy-consult') || document.querySelector('#copy-inquiry');
+copyBtn?.addEventListener('click', async () => {
+  let output = document.querySelector('#consult-output') || document.querySelector('#consult-result');
+  if (!output?.dataset.message) {
+    const built = buildConsultMessage();
+    output = built?.output;
+  }
+  const text = output?.dataset.message || output?.querySelector('pre')?.textContent || '';
   const status = document.querySelector('#copy-status');
+  if (!text) return;
   try {
-    await navigator.clipboard.writeText(preview.textContent);
-    status.textContent = '문의 내용을 복사했습니다. 카카오톡 대화창에 붙여넣고 전송해주세요.';
+    await navigator.clipboard.writeText(text);
+    if (status) status.textContent = '문의 내용을 클립보드에 복사했습니다. 카카오톡 대화창에 붙여넣고 전송해주세요.';
   } catch {
-    const range = document.createRange();
-    range.selectNodeContents(preview);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-    status.textContent = '자동 복사가 지원되지 않습니다. 선택된 문의 내용을 직접 복사해주세요.';
+    const pre = output?.querySelector('pre');
+    if (pre) {
+      const range = document.createRange();
+      range.selectNodeContents(pre);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+    if (status) status.textContent = '자동 복사가 지원되지 않습니다. 선택된 문의 내용을 직접 복사해주세요.';
   }
 });
 
@@ -537,7 +580,7 @@ function applyCmsOverrides() {
 
       container.innerHTML = list
         .map(
-          p => `<a class="partner-card" href="${escHtml(p.homepage_url || 'partners.html')}"${p.homepage_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="partner-poster"><img src="${escHtml(p.image)}" alt="${escHtml(p.name)} 파트너사 포스터" width="420" height="594" loading="lazy"></div><div class="partner-info"><h3>${escHtml(p.name)}</h3><p>${escHtml(p.description)}</p><span class="partner-link-badge">공식 사이트·안내 ↗</span></div></a>`
+          p => `<a class="partner-card" href="${escHtml(p.homepage_url || 'partners.html')}"${p.homepage_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="partner-poster"><img src="${escHtml(p.image)}" alt="${escHtml(p.name)} 파트너사 포스터" width="420" height="594" loading="lazy"></div><div class="partner-info"><h3>${escHtml(p.name)}</h3><p>${escHtml(p.description)}</p><span class="partner-link-badge">${escHtml(p.name)} 공식 안내 ↗</span></div></a>`
         )
         .join('');
     });
@@ -553,7 +596,7 @@ function applyCmsOverrides() {
     document.querySelectorAll('[data-cms-shop]').forEach(container => {
       container.innerHTML = list
         .map(
-          item => `<a class="shop-product-card" data-shop-cat="${escHtml(item.category || '업소·매장용 포충기')}" href="${escHtml(item.link_url || 'contact.html')}"${item.link_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="shop-product-thumb"><img src="${escHtml(item.image)}" alt="${escHtml(item.name)}" width="500" height="500" loading="lazy"></div><div class="shop-product-body"><span class="shop-cat-badge">${escHtml(item.category || '업소·매장용 포충기')}</span><h3>${escHtml(item.name)}</h3><div class="shop-price">${Number(item.price || 0).toLocaleString('ko-KR')}원</div><p>${escHtml(item.description)}</p><span class="shop-buy-btn">제품 상세·구매하기 ↗</span></div></a>`
+          item => `<a class="shop-product-card" data-shop-cat="${escHtml(item.category || '업소·매장용 포충기')}" href="${escHtml(item.link_url || 'contact.html')}"${item.link_url ? ' target="_blank" rel="noopener noreferrer"' : ''}><div class="shop-product-thumb"><img src="${escHtml(item.image)}" alt="${escHtml(item.name)}" width="500" height="500" loading="lazy"></div><div class="shop-product-body"><span class="shop-cat-badge">${escHtml(item.category || '업소·매장용 포충기')}</span><h3>${escHtml(item.name)}</h3><div class="shop-price">${Number(item.price || 0).toLocaleString('ko-KR')}원</div><p>${escHtml(item.description)}</p><span class="shop-buy-btn">포충기 상세·구매하기 ↗</span></div></a>`
         )
         .join('');
     });

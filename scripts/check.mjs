@@ -79,6 +79,10 @@ for (const file of htmlFiles) {
     throw new Error(`Found dynamic loading placeholder in ${file}`);
   }
 
+  if (html.includes('mango7557-ui.github.io') || html.includes('http://localhost')) {
+    throw new Error(`Found preview or localhost URL in production HTML ${file}`);
+  }
+
   const ldMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
   if (!ldMatch) {
     throw new Error(`Missing JSON-LD in ${file}`);
@@ -88,6 +92,30 @@ for (const file of htmlFiles) {
     throw new Error(`Invalid JSON-LD @graph in ${file}`);
   }
   jsonLdCount += parsed['@graph'].length;
+
+  const bcMatch = html.match(/<nav class="breadcrumb"[^>]*>([\s\S]*?)<\/nav>/);
+  if (bcMatch) {
+    const domCrumbCount = (bcMatch[1].match(/<a /g) || []).length + 1;
+    const ldCrumb = parsed['@graph'].find(n => n['@type'] === 'BreadcrumbList');
+    if (!ldCrumb || ldCrumb.itemListElement.length !== domCrumbCount) {
+      throw new Error(`BreadcrumbList mismatch in ${file}: DOM has ${domCrumbCount}, JSON-LD has ${ldCrumb?.itemListElement?.length}`);
+    }
+  }
+
+  if (file === 'shop.html') {
+    const itemList = parsed['@graph'].find(n => n['@type'] === 'ItemList');
+    if (!itemList || itemList.numberOfItems !== 4) {
+      throw new Error('Missing or invalid ItemList JSON-LD in shop.html');
+    }
+  }
+
+  const faqNode = parsed['@graph'].find(n => n['@type'] === 'FAQPage');
+  const domFaqCount = (html.match(/<details id="question-/g) || []).length;
+  if (faqNode || domFaqCount > 0) {
+    if (!faqNode || faqNode.mainEntity.length !== domFaqCount) {
+      throw new Error(`FAQPage mismatch in ${file}: DOM has ${domFaqCount}, JSON-LD has ${faqNode?.mainEntity?.length}`);
+    }
+  }
 
   const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
   for (const href of hrefs) {
